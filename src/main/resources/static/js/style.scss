@@ -49,59 +49,12 @@ ul {
   padding: 0;
 }
 
-input[type='text'], textarea{
+input[type='text'], textarea {
   padding: .7rem 1.2rem;
   width: 100%;
   border-radius: $radius;
   border: 1px solid $grey;
-  outline: none;
   font-size: 1.1rem;
-
-  &:focus {
-    border-color: $focus-color;
-    box-shadow: $focus-shadow;
-  }
-}
-
-.dropdown {
-  position: relative;
-
-  .dr-header  {
-
-    input {
-
-    }
-    .dr-icon {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-    }
-  }
-  .dr-container {
-    width: 100%;
-    display: flex;
-    position: absolute;
-    margin-top: .1rem;
-  ul {
-    display: flex;
-    width: 100%;
-    border-radius: $radius;
-    padding: .5rem 0;
-    flex-direction: column;
-    justify-content: flex-start;
-    background: #ffffff;
-    border: 1px solid $grey;
-    max-height: 200px;
-    overflow-y: scroll;
-  }
-  }
-  .dr-item {
-    width: 100%;
-    padding: .5rem 1rem;
-    &:hover {
-      background: $light-three;
-    }
-  }
 }
 
 .fab {
@@ -136,6 +89,29 @@ input[type='text'], textarea{
   background: $danger !important;
   &:hover {
     background: $danger-active !important;
+  }
+}
+
+.react-dropdown-select {
+  padding: .7rem 1.1rem !important;
+  border-radius: $radius !important;
+  border: 1px solid $grey !important;
+  .react-dropdown-select-content{
+    padding: 0;
+    width: 100%;
+    height: 1.5rem;
+    font-size: 1.2rem !important;
+  }
+  .react-dropdown-select-dropdown {
+    position: absolute;
+    width: 100%;
+    top: 3rem;
+    padding: .5rem 0;
+    border-radius: $radius !important;
+    border: 1px solid $grey !important;
+    .react-dropdown-select-item {
+      font-size: 1.2rem !important;
+    }
   }
 }
 

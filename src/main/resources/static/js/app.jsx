@@ -2,7 +2,7 @@ import React from 'react';
 import Header from 'components/header.jsx';
 import Sidebar from 'components/sidebar.jsx';
 
-import { MainPage, CropPage, PlantPage } from "pages/pages";
+import { MainPage, CropPage, PlantPage, SortPage } from "pages/pages";
 
 class App extends React.Component{
     render() {
@@ -17,8 +17,9 @@ class App extends React.Component{
                     </div>
                     <div className="page-container">
                         {/*<MainPage/>*/}
-                        {/*<CropPage/>*/}
+                        <SortPage/>
                         <PlantPage/>
+                        <CropPage/>
                     </div>
                 </div>
 

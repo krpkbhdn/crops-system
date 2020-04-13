@@ -14,7 +14,7 @@ public class Plant {
     private String name;
     @Column(name = "plant_description")
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "crop_id")
     private Crop crop;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

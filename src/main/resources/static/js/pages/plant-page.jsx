@@ -5,7 +5,7 @@ import ReactPaginate from 'react-paginate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { getPagePlants, getAllCrops, addPlant, updatePlant, deletePlant } from 'api/api'
-import Dropdown from "components/dropdown.jsx";
+import Select from "react-dropdown-select";
 
 class PlantPage extends React.Component {
     constructor() {
@@ -17,7 +17,7 @@ class PlantPage extends React.Component {
             crops:[],
             control: [{type: "success", event: () => this.openModal(), content: <FontAwesomeIcon icon={faPlus}/>}
             ],
-            column: ["#", "Назва", ""],
+            column: ["#", "Назва", "Культура",""],
             activePage: 0,
             size: 4,
             pageCount: 0,
@@ -25,23 +25,25 @@ class PlantPage extends React.Component {
             description: '',
             modalModeIsEdit: false,
             selectedItem: null,
+            selectedCrop: null,
         }
     }
     componentDidMount() {
         getPagePlants(this.state.activePage, this.state.size).then(res => res.data).then( data => (
-            this.setState({
-                plants: data.content,
-                pageCount: data.totalPages,
-                activePage: data.pageable.pageNumber
-            })
+            console.log(data),
+                this.setState({
+                    plants: data.content,
+                    pageCount: data.totalPages,
+                    activePage: data.pageable.pageNumber
+                })
         ));
-         getAllCrops().then(res => (this.setState({crops: res})));
+        getAllCrops().then(res => (this.setState({crops: res})));
     }
 
     handlePageChange(pageNumber) {
-        getPageCrops(pageNumber.selected, this.state.size).then(res => res.data).then( data => (
+        getPagePlants(pageNumber.selected, this.state.size).then(res => res.data).then( data => (
             this.setState({
-                crops: data.content,
+                plants: data.content,
                 pageCount: data.totalPages,
                 activePage: data.pageable.pageNumber
             })
@@ -49,10 +51,14 @@ class PlantPage extends React.Component {
     }
 
     addPlant() {
-        if (this.state.name.length > 0 && this.state.description.length > 0) {
-            addPlant(this.state.name, this.state.description).then(res => this.setState({
-                plants: this.state.plants.concat(res)
-            }));
+        if (this.state.name.length > 0 &&
+            this.state.description.length > 0 &&
+            this.state.selectedCrop !== null
+        ) {
+            addPlant(this.state.name, this.state.description, this.state.selectedCrop.id)
+                .then(res => this.setState({
+                    plants: this.state.plants.concat(res)
+                }));
             this._modal.current.closeModal();
         }
     }
@@ -92,36 +98,46 @@ class PlantPage extends React.Component {
         this.setState({
             name: '',
             description: '',
+            selectedCrop: [],
             modalModeIsEdit: false,
         });
-        this._modal.current.openModal()
+        this._modal.current.openModal();
     }
 
     openEditModel (item) {
         this.setState({
             selectedItem: item,
+            selectedCrop: [item.crop],
             name: item.name,
             description: item.description,
             modalModeIsEdit: true,
         });
-        this._modal.current.openModal()
+        this._modal.current.openModal();
     }
 
     handlerName(e) {
         this.setState({
             name: e.target.value
-        })
+        });
     }
 
     handlerDescription(e) {
         this.setState({
             description: e.target.value
-        })
+        });
     }
 
+    handlerSelectCrop(e) {
+        this.setState({
+            selectedCrop: e[0]
+        });
+        console.log(e[0])
+    }
 
     render() {
-        const {control, column, crops, plants, name, description, size, activePage, modalModeIsEdit} = this.state;
+        const {control, selectedCrop, column, crops, plants, name, description, size, activePage, modalModeIsEdit} = this.state;
+        let options = [];
+        crops.map((item, index )=> (options.push({label: item.name })));
         return (
             <div>
 
@@ -131,9 +147,19 @@ class PlantPage extends React.Component {
                             Рослини
                         </div>
                         <div className="m-content">
-                            <input type="text" value={name} onChange={e => this.handlerName(e)}/>
-
-                            <textarea value={description}  onChange={e => this.handlerDescription(e)} />
+                            <input type="text" placeholder={"Назва"} value={name} onChange={e => this.handlerName(e)}/>
+                            {
+                                !modalModeIsEdit ?
+                            <Select
+                                placeholder={"Культура"}
+                                value={selectedCrop}
+                                searchBy={ "name"}
+                                labelField= {"name"}
+                                valueField= {"id"}
+                                dropdownHeight= {"300px" }
+                                options={crops}
+                                onChange={(values) => this.handlerSelectCrop(values)} multi={false} /> : null}
+                            <textarea placeholder={"Опис"} value={description}  onChange={e => this.handlerDescription(e)} />
                         </div>
                         <div className="m-control">
                             <button className="m-btn danger" onClick={() => this._modal.current.closeModal()}>Відмінити</button>
@@ -152,8 +178,8 @@ class PlantPage extends React.Component {
                         {plants.map((item, index) =>
                             <tr key={index}>
                                 <td>{index + 1 + (size * activePage)}</td>
-                                <td>{item.name}</td>
-
+                                <td>{item.name !== null ? item.name : null}</td>
+                                <td>{item.crop.name !== null ? item.crop.name : null}</td>
                                 <td style={{display: "flex", justifyContent: "flex-end"}}>
                                     <button onClick={() => this.openEditModel(item)} className="fab info"><FontAwesomeIcon icon={faEdit}/></button>
                                     <button onClick={() => this.deletePlant(item)} className="fab danger"><FontAwesomeIcon icon={faTrash}/></button>
@@ -166,10 +192,11 @@ class PlantPage extends React.Component {
                             nextLabel='&#10095;'
                             previousLabel='&#10094;'
                             onPageChange={this.handlePageChange.bind(this)}
-                        /><Dropdown/></div>
+                        />
+
+                        </div>
                     </Table>
                 </div>
-
             </div>
         );
     }

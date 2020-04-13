@@ -17,9 +17,9 @@ async function getPlantById(id) {
     await axios.get("/api/plant/" + id).then(res => data = res.data)
     return data;
 }
-async function addPlant(plantName, plantDescription) {
+async function addPlant(plantName, plantDescription, cropId) {
     let data = null;
-    await axios.post("/api/plant", {name: plantName, description: plantDescription}).then(res => data = res.data)
+    await axios.post("/api/plant/" + cropId, {name: plantName, description: plantDescription}).then(res => data = res.data)
     return data;
 }
 async function updatePlant(id, plantName, plantDescription) {
