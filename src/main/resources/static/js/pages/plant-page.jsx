@@ -2,9 +2,9 @@ import React from "react";
 import Table from "components/table.jsx";
 import ModalWindow from "components/modal.jsx";
 import ReactPaginate from 'react-paginate';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { getPagePlants, getAllCrops, addPlant, updatePlant, deletePlant } from 'api/api'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {addPlant, deletePlant, getAllCrops, getPagePlants, updatePlant} from 'api/api'
 import Select from "react-dropdown-select";
 
 class PlantPage extends React.Component {
@@ -29,15 +29,7 @@ class PlantPage extends React.Component {
         }
     }
     componentDidMount() {
-        getPagePlants(this.state.activePage, this.state.size).then(res => res.data).then( data => (
-            console.log(data),
-                this.setState({
-                    plants: data.content,
-                    pageCount: data.totalPages,
-                    activePage: data.pageable.pageNumber
-                })
-        ));
-        getAllCrops().then(res => (this.setState({crops: res})));
+        this.handlePageChange(this.state.activePage);
     }
 
     handlePageChange(pageNumber) {
@@ -95,16 +87,18 @@ class PlantPage extends React.Component {
     }
 
     openModal () {
+        getAllCrops().then(res => (this.setState({crops: res})));
         this.setState({
             name: '',
             description: '',
-            selectedCrop: [],
+            selectedCrop: [{}],
             modalModeIsEdit: false,
         });
         this._modal.current.openModal();
     }
 
     openEditModel (item) {
+        getAllCrops().then(res => (this.setState({crops: res})));
         this.setState({
             selectedItem: item,
             selectedCrop: [item.crop],
@@ -131,7 +125,6 @@ class PlantPage extends React.Component {
         this.setState({
             selectedCrop: e[0]
         });
-        console.log(e[0])
     }
 
     render() {
@@ -150,15 +143,17 @@ class PlantPage extends React.Component {
                             <input type="text" placeholder={"Назва"} value={name} onChange={e => this.handlerName(e)}/>
                             {
                                 !modalModeIsEdit ?
-                            <Select
-                                placeholder={"Культура"}
-                                value={selectedCrop}
-                                searchBy={ "name"}
-                                labelField= {"name"}
-                                valueField= {"id"}
-                                dropdownHeight= {"300px" }
-                                options={crops}
-                                onChange={(values) => this.handlerSelectCrop(values)} multi={false} /> : null}
+                                    <Select
+
+                                        placeholder={"Культура"}
+                                        value={selectedCrop}
+                                        searchBy={ "name"}
+                                        labelField= {"name"}
+                                        valueField= {"id"}
+                                        dropdownHeight= {"300px" }
+                                        options={crops}
+                                        onChange={(values) => this.handlerSelectCrop(values)}
+                                        multi={false} /> : null}
                             <textarea placeholder={"Опис"} value={description}  onChange={e => this.handlerDescription(e)} />
                         </div>
                         <div className="m-control">

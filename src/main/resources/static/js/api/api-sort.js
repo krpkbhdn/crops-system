@@ -17,14 +17,14 @@ async function getSortById(id) {
     await axios.get("/api/sort/" + id).then(res => data = res.data)
     return data;
 }
-async function addSort(sortName) {
+async function addSort(name, description, img, plantId) {
     let data = null;
-    await axios.post("/api/sort", {name: sortName}).then(res => data = res.data)
+    await axios.post("/api/sort/" + plantId, {name, description, img}).then(res => data = res.data)
     return data;
 }
-async function updateSort(id, sortName) {
+async function updateSort(id, name, description, img) {
     let data = null;
-    await axios.put("/api/sort/" + id, {name: sortName}).then(res => data = res.data)
+    await axios.put("/api/sort/" + id, {name, description, img}).then(res => data = res.data)
     return data;
 }
 

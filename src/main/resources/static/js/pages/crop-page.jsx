@@ -26,13 +26,7 @@ class CropPage extends React.Component {
     }
 
     componentDidMount() {
-        getPageCrops(this.state.activePage, this.state.size).then(res => res.data).then( data => (
-            console.log(data), this.setState({
-                crops: data.content,
-                pageCount: data.totalPages,
-                activePage: data.pageable.pageNumber
-            })
-        ));
+        this.handlePageChange(this.state.activePage);
     }
 
     handlePageChange(pageNumber) {

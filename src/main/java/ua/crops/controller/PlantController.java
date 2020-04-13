@@ -28,6 +28,11 @@ public class PlantController {
         return plantRepo.findAll();
     }
 
+    @GetMapping("crop/{id}")
+    public List<Plant> getPlantsByCrop(@PathVariable("id") Crop crop) {
+        return plantRepo.findAllByCrop(crop);
+    }
+
     @GetMapping("page")
     public Page<Plant> page(@PageableDefault Pageable pageable) {
         return plantRepo.findAll(pageable);

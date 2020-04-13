@@ -16,7 +16,7 @@ public class Sort {
     private String description;
     @Column(name = "sort_img")
     private String img;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "plant_id")
     private Plant plant;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

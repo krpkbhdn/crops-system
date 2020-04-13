@@ -2,7 +2,13 @@ import axios from 'axios';
 
 async function getAllPlants() {
     let data = null;
-    await axios.get("/api/plant").then(res => data = res.data)
+    await axios.get("/api/plant").then(res => data = res.data);
+    return data;
+}
+
+async function getPlantsByCrop(cropId) {
+    let data = null;
+    await axios.get("/api/plant/crop/" + cropId).then(res => data = res.data);
     return data;
 }
 
@@ -34,4 +40,4 @@ async function deletePlant(id) {
 }
 
 
-export {getAllPlants, getPagePlants, getPlantById, addPlant, updatePlant, deletePlant}
+export {getAllPlants, getPlantsByCrop, getPagePlants, getPlantById, addPlant, updatePlant, deletePlant}

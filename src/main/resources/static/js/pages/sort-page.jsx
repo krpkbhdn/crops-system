@@ -2,9 +2,9 @@ import React from "react";
 import Table from "components/table.jsx";
 import ModalWindow from "components/modal.jsx";
 import ReactPaginate from 'react-paginate';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { getPagePlants, getAllCrops, addPlant, updatePlant, deletePlant } from 'api/api'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {addSort, deleteSort, getAllPlants, getPageSorts, updateSort} from 'api/api'
 import Select from "react-dropdown-select";
 
 class SortPage extends React.Component {
@@ -14,7 +14,6 @@ class SortPage extends React.Component {
         this.state = {
             modelIsOpen: true,
             plants: [],
-            crops:[],
             sorts: [],
             control: [{type: "success", event: () => this.openModal(), content: <FontAwesomeIcon icon={faPlus}/>}
             ],
@@ -27,80 +26,86 @@ class SortPage extends React.Component {
             img: null,
             modalModeIsEdit: false,
             selectedItem: null,
-            selectedCrop: null,
+            selectedPlant: null,
+            selectPlantIsDisabled: true,
         }
     }
     componentDidMount() {
-        getPagePlants(this.state.activePage, this.state.size).then(res => res.data).then( data => (
-            console.log(data),
-                this.setState({
-                    plants: data.content,
-                    pageCount: data.totalPages,
-                    activePage: data.pageable.pageNumber
-                })
-        ));
-        getAllCrops().then(res => (this.setState({crops: res})));
+        this.handlePageChange(this.state.activePage);
     }
 
     handlePageChange(pageNumber) {
-        getPagePlants(pageNumber.selected, this.state.size).then(res => res.data).then( data => (
+        getPageSorts(pageNumber.selected, this.state.size).then(res => res.data).then( data => (
             this.setState({
-                plants: data.content,
+                sorts: data.content,
                 pageCount: data.totalPages,
                 activePage: data.pageable.pageNumber
             })
         ));
     }
 
-    addPlant() {
+    addSort() {
         if (this.state.name.length > 0 &&
             this.state.description.length > 0 &&
-            this.state.selectedCrop !== null
+            this.state.selectedPlant !== null
         ) {
-            addPlant(this.state.name, this.state.description, this.state.selectedCrop.id)
-                .then(res => this.setState({
-                    plants: this.state.plants.concat(res)
-                }));
+            addSort(
+                this.state.name,
+                this.state.description,
+                this.state.img,
+                this.state.selectedPlant.id
+            ).then(res => this.setState({
+                sorts: this.state.sorts.concat(res)
+            }));
             this._modal.current.closeModal();
         }
     }
 
-    editPlant() {
-        if (this.state.name.length > 0 && this.state.description.length > 0) {
-            updatePlant(this.state.selectedItem.id ,this.state.name, this.state.description).then(res => this.updateItem(res));
+    editSort() {
+        if (this.state.name.length > 0 &&
+            this.state.description.length > 0 &&
+            this.state.selectedItem !== null
+        ) {
+            updateSort(
+                this.state.selectedItem.id,
+                this.state.name,
+                this.state.description,
+                this.state.img
+            ).then(res => this.updateItem(res));
             this._modal.current.closeModal();
         }
     }
 
-    deletePlant(item) {
-        deletePlant(item.id).then(res => res.status === 200 ? this.removeItem(item) : null )
+    deleteSort(item) {
+        deleteSort(item.id).then(res => res.status === 200 ? this.removeItem(item) : null )
     }
 
     updateItem(item) {
-        let array = [...this.state.plants];
+        let array = [...this.state.sorts];
         let index = array.indexOf(this.state.selectedItem)
         if (index !== -1) {
             array[index] = item;
             this.setState({
-                plants: array
+                sorts: array
             });
         }
     }
 
     removeItem(item) {
-        let array = [...this.state.plants]; // make a separate copy of the array
+        let array = [...this.state.sorts]; // make a separate copy of the array
         let index = array.indexOf(item)
         if (index !== -1) {
             array.splice(index, 1);
-            this.setState({ plants: array });
+            this.setState({ sorts: array });
         }
     }
 
     openModal () {
+        getAllPlants().then(res => (this.setState({plants: res})));
         this.setState({
             name: '',
             description: '',
-            selectedCrop: [],
+            selectedPlant: [],
             modalModeIsEdit: false,
         });
         this._modal.current.openModal();
@@ -109,7 +114,7 @@ class SortPage extends React.Component {
     openEditModel (item) {
         this.setState({
             selectedItem: item,
-            selectedCrop: [item.crop],
+            plant: [item.plant],
             name: item.name,
             description: item.description,
             modalModeIsEdit: true,
@@ -129,17 +134,14 @@ class SortPage extends React.Component {
         });
     }
 
-    handlerSelectCrop(e) {
+    handlerSelectPlant(e) {
         this.setState({
-            selectedCrop: e[0]
+            selectedPlant: e[0]
         });
-        console.log(e[0])
     }
 
     render() {
-        const {control, selectedCrop, column, crops, plants, name, description, size, activePage, modalModeIsEdit} = this.state;
-        let options = [];
-        crops.map((item, index )=> (options.push({label: item.name })));
+        const {control, selectedPlant, column, plants, sorts, name, description, size, activePage, modalModeIsEdit} = this.state;
         return (
             <div>
 
@@ -153,22 +155,26 @@ class SortPage extends React.Component {
                             {
                                 !modalModeIsEdit ?
                                     <Select
-                                        placeholder={"Культура"}
-                                        value={selectedCrop}
+                                        placeholder={"Рослина"}
+                                        value={selectedPlant}
                                         searchBy={ "name"}
                                         labelField= {"name"}
                                         valueField= {"id"}
                                         dropdownHeight= {"300px" }
-                                        options={crops}
-                                        onChange={(values) => this.handlerSelectCrop(values)} multi={false} /> : null}
+                                        options={plants}
+                                        onChange={(values) => this.handlerSelectPlant(values)}
+                                        multi={false}
+                                    />
+
+                                    : null}
                             <textarea placeholder={"Опис"} value={description}  onChange={e => this.handlerDescription(e)} />
                         </div>
                         <div className="m-control">
                             <button className="m-btn danger" onClick={() => this._modal.current.closeModal()}>Відмінити</button>
                             {
                                 modalModeIsEdit ?
-                                    <button className="m-btn info" onClick={() => this.editPlant()}>Змінити</button> :
-                                    <button className="m-btn success" onClick={() => this.addPlant()}>Добавити</button>
+                                    <button className="m-btn info" onClick={() => this.editSort()}>Змінити</button> :
+                                    <button className="m-btn success" onClick={() => this.addSort()}>Добавити</button>
                             }
 
                         </div>
@@ -177,15 +183,15 @@ class SortPage extends React.Component {
                     <Table control={control} column={column} title={"Сорти"}>
 
                         <tbody>
-                        {plants.map((item, index) =>
+                        {sorts.map((item, index) =>
                             <tr key={index}>
                                 <td>{index + 1 + (size * activePage)}</td>
-                                <td>{item.name !== null ? item.name : null}</td>
-                                <td></td>
-                                <td>{item.crop.name !== null ? item.crop.name : null}</td>
+                                <td>{item.name}</td>
+                                <td>{item.plant.name}</td>
+                                <td>{item.plant.crop.name}</td>
                                 <td style={{display: "flex", justifyContent: "flex-end"}}>
                                     <button onClick={() => this.openEditModel(item)} className="fab info"><FontAwesomeIcon icon={faEdit}/></button>
-                                    <button onClick={() => this.deletePlant(item)} className="fab danger"><FontAwesomeIcon icon={faTrash}/></button>
+                                    <button onClick={() => this.deleteSort(item)} className="fab danger"><FontAwesomeIcon icon={faTrash}/></button>
                                 </td>
                             </tr>
                         )}
