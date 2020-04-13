@@ -29,7 +29,7 @@ $shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
 
 html, body {
   margin: 0;
-  font-family: 'Mont';
+  font-family: 'Mont', serif;
   background: $light-three;
   font-size: 1rem;
 }
@@ -106,6 +106,7 @@ input[type='text'], textarea {
   .react-dropdown-select-dropdown {
     position: absolute;
     width: 100%;
+    max-height: 20rem;
     top: 3rem;
     padding: .5rem 0;
     border-radius: $radius !important;
@@ -118,6 +119,7 @@ input[type='text'], textarea {
 
 .page-section {
   display: flex;
+  width: 100%;
 }
 
 .app {
@@ -413,6 +415,7 @@ input[type='text'], textarea {
 
 .info-card {
   max-width: 100%;
+  width: 100%;
   margin: $block-margin;
   background: $light;
   border-radius: $radius;

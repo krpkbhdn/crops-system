@@ -12,6 +12,12 @@ async function getPageCrops(page, size) {
     return data;
 }
 
+async function getCountOfCrops() {
+    let data = null;
+    await axios.get('/api/crop/count').then(res => data = res);
+    return data;
+}
+
 async function getCropById(id) {
     let data = null;
     await axios.get("/api/crop/" + id).then(res => data = res.data)
@@ -34,4 +40,4 @@ async function deleteCrop(id) {
 }
 
 
-export {getAllCrops, getPageCrops, getCropById, addCrop, updateCrop, deleteCrop}
+export {getAllCrops, getCountOfCrops, getPageCrops, getCropById, addCrop, updateCrop, deleteCrop}

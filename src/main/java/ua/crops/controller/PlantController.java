@@ -28,6 +28,11 @@ public class PlantController {
         return plantRepo.findAll();
     }
 
+    @GetMapping("count")
+    public Long getCount() {
+        return plantRepo.count();
+    }
+
     @GetMapping("crop/{id}")
     public List<Plant> getPlantsByCrop(@PathVariable("id") Crop crop) {
         return plantRepo.findAllByCrop(crop);

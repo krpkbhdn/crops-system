@@ -132,12 +132,12 @@ class PlantPage extends React.Component {
         let options = [];
         crops.map((item, index )=> (options.push({label: item.name })));
         return (
-            <div>
+
 
                 <div className="page-section">
                     <ModalWindow ref={this._modal}>
                         <div className="m-title">
-                            Рослини
+                            Рослина
                         </div>
                         <div className="m-content">
                             <input type="text" placeholder={"Назва"} value={name} onChange={e => this.handlerName(e)}/>
@@ -192,7 +192,7 @@ class PlantPage extends React.Component {
                         </div>
                     </Table>
                 </div>
-            </div>
+
         );
     }
 }

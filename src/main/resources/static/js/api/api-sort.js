@@ -12,6 +12,12 @@ async function getPageSorts(page, size) {
     return data;
 }
 
+async function getCountOfSorts() {
+    let data = null;
+    await axios.get('/api/sort/count').then(res => data = res);
+    return data;
+}
+
 async function getSortById(id) {
     let data = null;
     await axios.get("/api/sort/" + id).then(res => data = res.data)
@@ -34,4 +40,4 @@ async function deleteSort(id) {
 }
 
 
-export {getAllSorts, getPageSorts, getSortById, addSort, updateSort, deleteSort}
+export {getAllSorts, getPageSorts, getCountOfSorts, getSortById, addSort, updateSort, deleteSort}

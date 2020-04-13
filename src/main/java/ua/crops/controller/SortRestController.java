@@ -25,6 +25,11 @@ public class SortRestController {
         return sortRepo.findAll();
     }
 
+    @GetMapping("count")
+    public Long getCount() {
+        return sortRepo.count();
+    }
+
     @GetMapping("page")
     public Page<Sort> page(@PageableDefault Pageable pageable) {
         return sortRepo.findAll(pageable);

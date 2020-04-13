@@ -27,6 +27,11 @@ public class CropRestController {
         return cropRepo.findAll();
     }
 
+    @GetMapping("count")
+    public Long getCount() {
+        return cropRepo.count();
+    }
+
     @GetMapping("page")
     public Page<Crop> page(@PageableDefault Pageable pageable) {
         return cropRepo.findAll(pageable);

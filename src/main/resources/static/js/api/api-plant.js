@@ -18,6 +18,12 @@ async function getPagePlants(page, size) {
     return data;
 }
 
+async function getCountOfPlants() {
+    let data = null;
+    await axios.get('/api/plant/count').then(res => data = res);
+    return data;
+}
+
 async function getPlantById(id) {
     let data = null;
     await axios.get("/api/plant/" + id).then(res => data = res.data)
@@ -40,4 +46,4 @@ async function deletePlant(id) {
 }
 
 
-export {getAllPlants, getPlantsByCrop, getPagePlants, getPlantById, addPlant, updatePlant, deletePlant}
+export {getAllPlants, getPlantsByCrop, getCountOfPlants, getPagePlants, getPlantById, addPlant, updatePlant, deletePlant}

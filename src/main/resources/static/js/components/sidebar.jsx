@@ -52,7 +52,7 @@ const sidebarMenu = [
             },
         ]
     }
-]
+];
 
 
 class Sidebar extends React.Component {

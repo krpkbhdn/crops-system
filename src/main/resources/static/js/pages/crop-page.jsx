@@ -17,7 +17,7 @@ class CropPage extends React.Component {
             control: [{type: "success", event: () => this.openModal(), content: <FontAwesomeIcon icon={faPlus}/>}],
             column: ["#", "Назва", ""],
             activePage: 0,
-            size: 5,
+            size: 4,
             pageCount: 0,
             inputValue: '',
             modalModeIsEdit: false,
@@ -105,7 +105,7 @@ class CropPage extends React.Component {
     render() {
         const {control, column, crops, inputValue, size, activePage, modalModeIsEdit} = this.state;
         return (
-            <div>
+
 
                 <div className="page-section">
                     <ModalWindow ref={this._modal}>
@@ -113,7 +113,7 @@ class CropPage extends React.Component {
                             Культура
                         </div>
                         <div className="m-content">
-                            <input type="text" value={inputValue} onChange={e => this.handlerInput(e)}/>
+                            <input type="text" placeholder={"Назва"} value={inputValue} onChange={e => this.handlerInput(e)}/>
                         </div>
                         <div className="m-control">
                             <button className="m-btn danger" onClick={() => this._modal.current.closeModal()}>Відмінити</button>
@@ -148,7 +148,7 @@ class CropPage extends React.Component {
                     </Table>
                 </div>
 
-            </div>
+
         );
     }
 }

@@ -148,7 +148,7 @@ class SortPage extends React.Component {
                 <div className="page-section">
                     <ModalWindow ref={this._modal}>
                         <div className="m-title">
-                            Сорти
+                            Сорт
                         </div>
                         <div className="m-content">
                             <input type="text" placeholder={"Назва"} value={name} onChange={e => this.handlerName(e)}/>
