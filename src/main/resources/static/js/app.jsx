@@ -18,16 +18,16 @@ class App extends React.Component{
                     <div className="page-container">
 
                         <MainPage/>
-                        <div className="page-section">
-                            <ParameterPage/>
-                            <UnitPage/>
-                        </div>
+
                         <SortPage/>
                         <div className="page-section">
                         <PlantPage/>
                         <CropPage/>
                         </div>
-
+                        <div className="page-section">
+                            <ParameterPage/>
+                            <UnitPage/>
+                        </div>
                     </div>
                 </div>
 
