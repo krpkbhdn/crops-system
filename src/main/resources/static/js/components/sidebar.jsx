@@ -1,55 +1,60 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faNewspaper, faThList, faSeedling, faUsers, faBuilding, faBoxes, faFlask, faChartBar, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faNewspaper, faThList, faSeedling, faCog,faUsers, faBuilding, faBoxes, faFlask, faChartBar, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { BrowserRouter as Router, Link} from "react-router-dom";
 
 const sidebarMenu = [
     {title: '', sections: [
-            {title: 'Статистика', icon: faChartBar, links: [
-                    {name: 'Дослідження', href: '#'},
-                    {name: 'Культури', href: '#'},
-                    {name: 'Працівники', href: '#'},
-                ]
-            },
+            // {title: 'Статистика', icon: faChartBar, links: [
+            //         {name: 'Дослідження', href: '#'},
+            //         {name: 'Культури', href: '#'},
+            //         {name: 'Працівники', href: '#'},
+            //     ]
+            // },
             {title: 'Дослідження', icon: faFlask, links: [
                     {name: 'Очікують початку', href: '#'},
-                    {name: 'Проводяться', href: '#'},
+                    {name: 'Активні', href: '/research/active'},
                     {name: 'Очікують завершення', href: '#'},
                 ]
             },
-            {title: 'Реєстр', icon: faBoxes, links: [
-                    {name: 'Сорти', href: '#'},
-                ]
-            },
-            {title: 'Заявки', icon: faThList, links: [
-                    {name: 'Нові', href: '#'},
-                    {name: 'Очікують', href: '#'},
-                    {name: 'Прийняті', href: '#'},
-                    {name: 'Відхиленні', href: '#'},
+            // {title: 'Реєстр', icon: faBoxes, links: [
+            //         {name: 'Сорти', href: '#'},
+            //     ]
+            // },
+            // {title: 'Заявки', icon: faThList, links: [
+            //         {name: 'Нові', href: '#'},
+            //         {name: 'Очікують', href: '#'},
+            //         {name: 'Прийняті', href: '#'},
+            //         {name: 'Відхиленні', href: '#'},
+            //     ]
+            // },
+            {title: 'Рослиництво', icon: faSeedling, links: [
+                    {name: 'Культури', href: '/crop'},
+                    {name: 'Рослини', href: '/plant'},
+                    {name: 'Сорти', href: '/sort'},
                 ]
             },
             {title: 'Організація', icon: faBuilding, links: [
-                    {name: 'Кліматичні зони', href: '#'},
-                    {name: 'Станції', href: '#'},
-                    {name: 'Земельні ділянки', href: '#'},
+                    {name: 'Станції', href: '/station'},
                 ]
             },
-            {title: 'Рослиництво', icon: faSeedling, links: [
-                    {name: 'Культури', href: '#'},
-                    {name: 'Рослини', href: '#'},
-                    {name: 'Сорти', href: '#'},
+            {title: 'Загальні параметри', icon: faCog, links: [
+                    {name: 'Кліматичні зони', href: '/climate-zone'},
+                    {name: 'Параметри', href: '/parameter'},
+                    {name: 'Одиниці вимірювання', href: '/unit'},
                 ]
             },
-            {title: 'Працівники', icon: faUsers, links: [
-                    {name: 'Активність', href: '#'},
-                    {name: 'Працівники', href: '#'},
-                    {name: 'Посади', href: '#'},
-                ]
-            },
-            {title: 'Блог', icon: faNewspaper, links: [
-                    {name: 'Статті', href: '#'},
-                    {name: 'Теги', href: '#'},
-                ]
-            },
+            // {title: 'Працівники', icon: faUsers, links: [
+            //         {name: 'Активність', href: '#'},
+            //         {name: 'Працівники', href: '#'},
+            //         {name: 'Посади', href: '#'},
+            //     ]
+            // },
+            // {title: 'Блог', icon: faNewspaper, links: [
+            //         {name: 'Статті', href: '#'},
+            //         {name: 'Теги', href: '#'},
+            //     ]
+            // },
         ]
     }
 ];
@@ -85,7 +90,6 @@ class SidebarSection extends React.Component {
                     </div>
                 ) : ""}
                 {section.sections.map((item, index) => <SidebarCollapse key={index} section={item}/>)}
-
             </div>
         )
     }
@@ -130,7 +134,7 @@ class SidebarCollapse extends React.Component {
                 <div className="collapse-container"
                      style={isActive ? {height: componentHeight} : {height: "0"}}>
                     <ul ref={this.listRef}>
-                        {section.links.map((item, index) => <li key={index}><a href={item.href}>{item.name}</a></li>)}
+                        {section.links.map((item, index) => <li key={index}><Link to={item.href}>{item.name}</Link></li>)}
                     </ul>
 
                 </div>

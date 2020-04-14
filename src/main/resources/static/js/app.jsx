@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from 'components/header.jsx';
 import Sidebar from 'components/sidebar.jsx';
-
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {
     MainPage,
     CropPage,
@@ -10,13 +10,15 @@ import {
     ParameterPage,
     UnitPage,
     StationPage,
-    ClimateZonePage
+    ClimateZonePage,
+    ResearchActivePage
 } from "pages/pages";
 
 class App extends React.Component{
     render() {
         return(
             <div className="app">
+                <Router>
                 <div className="sidebar-container">
                     <Sidebar/>
                 </div>
@@ -26,21 +28,33 @@ class App extends React.Component{
                     </div>
                     <div className="page-container">
 
-                        <MainPage/>
-                        <StationPage/>
-                        <ClimateZonePage/>
-                        <SortPage/>
-                        <div className="page-section">
-                            <PlantPage/>
-                            <CropPage/>
-                        </div>
-                        <div className="page-section">
-                            <ParameterPage/>
-                            <UnitPage/>
-                        </div>
+                            <Switch>
+                                <Route exact path="/" component={MainPage}/>
+                                <Route path="/crop" component={CropPage}/>
+                                <Route path="/plant" component={PlantPage}/>
+                                <Route path="/sort" component={SortPage}/>
+                                <Route path="/climate-zone" component={ClimateZonePage}/>
+                                <Route path="/station" component={StationPage}/>
+                                <Route path="/unit" component={UnitPage}/>
+                                <Route path="/parameter" component={ParameterPage}/>
+                                <Route path="/research/active" component={ResearchActivePage}/>
+                            </Switch>
+
+                        {/*<MainPage/>*/}
+                        {/*<StationPage/>*/}
+                        {/*<ClimateZonePage/>*/}
+                        {/*<SortPage/>*/}
+                        {/*<div className="page-section">*/}
+                        {/*    <PlantPage/>*/}
+                        {/*    <CropPage/>*/}
+                        {/*</div>*/}
+                        {/*<div className="page-section">*/}
+                        {/*    <ParameterPage/>*/}
+                        {/*    <UnitPage/>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
-
+                </Router>
             </div>
 
         );
