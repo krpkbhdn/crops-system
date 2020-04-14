@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.Parameter;
+import ua.crops.entity.Unit;
 import ua.crops.repo.ParameterRepo;
 
 import java.util.List;
@@ -37,8 +38,9 @@ public class ParameterRestController {
         return parameter;
     }
 
-    @PostMapping
-    public Parameter add(@RequestBody Parameter parameter) {
+    @PostMapping("{id}")
+    public Parameter add(@PathVariable("id") Unit unit, @RequestBody Parameter parameter) {
+        parameter.setUnit(unit);
         return parameterRepo.save(parameter);
     }
 

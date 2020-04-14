@@ -23,14 +23,14 @@ async function getCropById(id) {
     await axios.get("/api/crop/" + id).then(res => data = res.data)
     return data;
 }
-async function addCrop(cropName) {
+async function addCrop(name) {
     let data = null;
-    await axios.post("/api/crop", {name: cropName}).then(res => data = res.data)
+    await axios.post("/api/crop", {name}).then(res => data = res.data)
     return data;
 }
-async function updateCrop(id, cropName) {
+async function updateCrop(id, name) {
     let data = null;
-    await axios.put("/api/crop/" + id, {name: cropName}).then(res => data = res.data)
+    await axios.put("/api/crop/" + id, {name}).then(res => data = res.data)
     return data;
 }
 

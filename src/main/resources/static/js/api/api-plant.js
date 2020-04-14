@@ -29,14 +29,14 @@ async function getPlantById(id) {
     await axios.get("/api/plant/" + id).then(res => data = res.data)
     return data;
 }
-async function addPlant(plantName, plantDescription, cropId) {
+async function addPlant(name, description, cropId) {
     let data = null;
-    await axios.post("/api/plant/" + cropId, {name: plantName, description: plantDescription}).then(res => data = res.data)
+    await axios.post("/api/plant/" + cropId, {name, description}).then(res => data = res.data)
     return data;
 }
-async function updatePlant(id, plantName, plantDescription) {
+async function updatePlant(id, name, description) {
     let data = null;
-    await axios.put("/api/plant/" + id, {name: plantName, description: plantDescription}).then(res => data = res.data)
+    await axios.put("/api/plant/" + id, {name, description}).then(res => data = res.data)
     return data;
 }
 

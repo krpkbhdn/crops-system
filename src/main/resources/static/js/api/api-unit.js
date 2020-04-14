@@ -17,14 +17,14 @@ async function getUnitById(id) {
     await axios.get("/api/unit/" + id).then(res => data = res.data)
     return data;
 }
-async function addUnit(unitName) {
+async function addUnit(name, shortName) {
     let data = null;
-    await axios.post("/api/unit", {name: unitName}).then(res => data = res.data)
+    await axios.post("/api/unit", {name, shortName}).then(res => data = res.data)
     return data;
 }
-async function updateUnit(id, unitName) {
+async function updateUnit(id, name, shortName) {
     let data = null;
-    await axios.put("/api/unit/" + id, {name: unitName}).then(res => data = res.data)
+    await axios.put("/api/unit/" + id, {name, shortName}).then(res => data = res.data)
     return data;
 }
 

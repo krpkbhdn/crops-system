@@ -1,10 +1,8 @@
 import React from "react";
 import Table from "components/table.jsx";
 import ModalWindow from "components/modal.jsx";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-
-import { getPageCrops, addCrop, updateCrop, deleteCrop } from 'api/api'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 import ReactPaginate from 'react-paginate';
 import {addUnit, deleteUnit, getPageUnits, updateUnit} from "../api/api-unit";
 

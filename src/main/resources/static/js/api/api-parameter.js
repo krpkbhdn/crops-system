@@ -17,14 +17,14 @@ async function getParameterById(id) {
     await axios.get("/api/parameter/" + id).then(res => data = res.data)
     return data;
 }
-async function addParameter(parameterName) {
+async function addParameter(name, unitId) {
     let data = null;
-    await axios.post("/api/parameter", {name: parameterName}).then(res => data = res.data)
+    await axios.post("/api/parameter/" + unitId, {name}).then(res => data = res.data)
     return data;
 }
-async function updateParameter(id, parameterName) {
+async function updateParameter(id, name) {
     let data = null;
-    await axios.put("/api/parameter/" + id, {name: parameterName}).then(res => data = res.data)
+    await axios.put("/api/parameter/" + id, {name}).then(res => data = res.data)
     return data;
 }
 

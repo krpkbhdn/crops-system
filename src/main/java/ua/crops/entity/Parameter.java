@@ -11,7 +11,7 @@ public class Parameter {
     private Long id;
     @Column(name = "parameter_name")
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "unit_id")
     private Unit unit;
 
