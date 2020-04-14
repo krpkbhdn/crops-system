@@ -4,7 +4,7 @@ import ModalWindow from "components/modal.jsx";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 import ReactPaginate from 'react-paginate';
-import {addUnit, addZone, deleteUnit, deleteZone, getPageUnits, getPageZones, updateUnit} from "api/api";
+import {addZone, deleteZone, getPageZones} from "api/api";
 import {updateZone} from "../api/api-climate-zone";
 
 class ClimateZonePage extends React.Component {

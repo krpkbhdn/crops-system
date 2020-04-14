@@ -11,6 +11,7 @@ class PlantPage extends React.Component {
     constructor() {
         super();
         this._modal = React.createRef();
+        this._selectCrop = React.createRef();
         this.state = {
             modelIsOpen: true,
             plants: [],
@@ -87,6 +88,7 @@ class PlantPage extends React.Component {
     }
 
     openModal () {
+        this._selectCrop.current.clearAll();
         getAllCrops().then(res => (this.setState({crops: res})));
         this.setState({
             name: '',
@@ -98,6 +100,7 @@ class PlantPage extends React.Component {
     }
 
     openEditModel (item) {
+        this._selectCrop.current.clearAll();
         getAllCrops().then(res => (this.setState({crops: res})));
         this.setState({
             selectedItem: item,
@@ -144,7 +147,7 @@ class PlantPage extends React.Component {
                             {
                                 !modalModeIsEdit ?
                                     <Select
-
+                                        ref={this._selectCrop}
                                         placeholder={"Культура"}
                                         value={selectedCrop}
                                         searchBy={ "name"}

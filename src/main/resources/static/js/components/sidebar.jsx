@@ -1,7 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faNewspaper, faThList, faSeedling, faCog,faUsers, faBuilding, faBoxes, faFlask, faChartBar, faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import { BrowserRouter as Router, Link} from "react-router-dom";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faBuilding, faCaretDown, faCog, faFlask, faSeedling} from '@fortawesome/free-solid-svg-icons';
+import {Link} from "react-router-dom";
 
 const sidebarMenu = [
     {title: '', sections: [

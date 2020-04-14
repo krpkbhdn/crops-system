@@ -1,17 +1,17 @@
 import React from 'react';
 import Header from 'components/header.jsx';
 import Sidebar from 'components/sidebar.jsx';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {
-    MainPage,
-    CropPage,
-    PlantPage,
-    SortPage,
-    ParameterPage,
-    UnitPage,
-    StationPage,
     ClimateZonePage,
-    ResearchActivePage
+    CropPage,
+    MainPage,
+    ParameterPage,
+    PlantPage,
+    ResearchActivePage,
+    SortPage,
+    StationPage,
+    UnitPage
 } from "pages/pages";
 
 class App extends React.Component{

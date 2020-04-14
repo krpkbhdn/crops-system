@@ -11,6 +11,7 @@ class SortPage extends React.Component {
     constructor() {
         super();
         this._modal = React.createRef();
+        this._selectPlant = React.createRef();
         this.state = {
             modelIsOpen: true,
             plants: [],
@@ -101,6 +102,7 @@ class SortPage extends React.Component {
     }
 
     openModal () {
+        this._selectPlant.current.clearAll();
         getAllPlants().then(res => (this.setState({plants: res})));
         this.setState({
             name: '',
@@ -155,6 +157,7 @@ class SortPage extends React.Component {
                             {
                                 !modalModeIsEdit ?
                                     <Select
+                                        ref={this._selectPlant}
                                         placeholder={"Рослина"}
                                         value={selectedPlant}
                                         searchBy={ "name"}

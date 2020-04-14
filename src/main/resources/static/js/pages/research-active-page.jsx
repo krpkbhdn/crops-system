@@ -10,7 +10,7 @@ class ResearchActivePage extends React.Component{
         this._tbody = React.createRef();
         this.state = {
             tableTitle: "Активні дослідження",
-            column: ["#", "Parameter name", "Parameter Value", "Parameter Unit", "Parameter Control"],
+            column: ["#", "Parameter name", "Parameter Value", "Parameter Unit", ""],
             control: [
                 {type: "success", event: () => this.addRecord(), content: <FontAwesomeIcon icon={faPlus}/>},
                 {type: "info", event: () => this.save(), content: <FontAwesomeIcon icon={faSave}/>}

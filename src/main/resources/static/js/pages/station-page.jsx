@@ -1,24 +1,17 @@
 import React from "react";
 import Table from "components/table.jsx";
 import ModalWindow from "components/modal.jsx";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 import ReactPaginate from 'react-paginate';
 import Select from "react-dropdown-select";
-import {
-    addParameter,
-    deleteParameter,
-    getPageParameters,
-    updateParameter,
-    getAllUnits,
-    getPageStations,
-    addStation, updateStation, deleteStation, getAllZones
-} from "api/api";
+import {addStation, deleteStation, getAllZones, getPageStations, updateStation} from "api/api";
 
 class StationPage extends React.Component {
     constructor() {
         super();
         this._modal = React.createRef();
+        this._selectZone = React.createRef();
         this.state = {
             modelIsOpen: true,
             zones: [],
@@ -96,6 +89,7 @@ class StationPage extends React.Component {
     }
 
     openModal () {
+        this._selectZone.current.clearAll();
         getAllZones().then(res => (this.setState({zones: res})));
         this.setState({
             name: '',
@@ -183,7 +177,7 @@ class StationPage extends React.Component {
                         {
                             !modalModeIsEdit ?
                                 <Select
-
+                                    ref={this._selectZone}
                                     placeholder={"Кліматична зона"}
                                     value={selectedZone}
                                     searchBy={ "name"}

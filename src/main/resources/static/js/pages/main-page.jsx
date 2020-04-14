@@ -1,6 +1,7 @@
 import React from "react";
 import InfoCard from "components/card.jsx";
-import { getCountOfCrops, getCountOfSorts, getCountOfPlants } from 'api/api'
+import {getCountOfCrops, getCountOfPlants, getCountOfSorts} from 'api/api'
+
 class MainPage extends React.Component {
     constructor() {
         super();

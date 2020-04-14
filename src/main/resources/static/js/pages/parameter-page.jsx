@@ -1,16 +1,17 @@
 import React from "react";
 import Table from "components/table.jsx";
 import ModalWindow from "components/modal.jsx";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 import ReactPaginate from 'react-paginate';
 import Select from "react-dropdown-select";
-import {addParameter, deleteParameter, getPageParameters, updateParameter, getAllUnits} from "api/api";
+import {addParameter, deleteParameter, getAllUnits, getPageParameters, updateParameter} from "api/api";
 
 class ParameterPage extends React.Component {
     constructor() {
         super();
         this._modal = React.createRef();
+        this._selectUnit = React.createRef();
         this.state = {
             modelIsOpen: true,
             units: [],
@@ -83,6 +84,7 @@ class ParameterPage extends React.Component {
     }
 
     openModal () {
+        this._selectUnit.current.clearAll();
         getAllUnits().then(res => (this.setState({units: res})));
         this.setState({
             name: '',
@@ -128,7 +130,7 @@ class ParameterPage extends React.Component {
                         {
                             !modalModeIsEdit ?
                                 <Select
-
+                                    ref={this._selectUnit}
                                     placeholder={"Одиниця вимірювання"}
                                     value={selectedUnit}
                                     searchBy={ "name"}
