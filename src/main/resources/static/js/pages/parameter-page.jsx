@@ -3,12 +3,9 @@ import Table from "components/table.jsx";
 import ModalWindow from "components/modal.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-
-import {getPageCrops, addCrop, updateCrop, deleteCrop, getPagePlants, updatePlant, getAllCrops} from 'api/api'
 import ReactPaginate from 'react-paginate';
 import Select from "react-dropdown-select";
-import {getAllUnits, getPageUnits} from "../api/api-unit";
-import {addParameter, deleteParameter, getPageParameters, updateParameter} from "../api/api-parameter";
+import {addParameter, deleteParameter, getPageParameters, updateParameter, getAllUnits} from "api/api";
 
 class ParameterPage extends React.Component {
     constructor() {

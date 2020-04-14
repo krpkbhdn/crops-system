@@ -51,7 +51,7 @@ public class StationRestController {
 
     @PutMapping("{id}")
     public Station update(@PathVariable("id") Station dbStation, @RequestBody Station station) {
-        BeanUtils.copyProperties(station, dbStation, "id");
+        BeanUtils.copyProperties(station, dbStation, "id", "climateZone");
         return stationRepo.save(dbStation);
     }
 

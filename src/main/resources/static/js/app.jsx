@@ -2,7 +2,16 @@ import React from 'react';
 import Header from 'components/header.jsx';
 import Sidebar from 'components/sidebar.jsx';
 
-import {MainPage, CropPage, PlantPage, SortPage, ParameterPage, UnitPage} from "pages/pages";
+import {
+    MainPage,
+    CropPage,
+    PlantPage,
+    SortPage,
+    ParameterPage,
+    UnitPage,
+    StationPage,
+    ClimateZonePage
+} from "pages/pages";
 
 class App extends React.Component{
     render() {
@@ -18,11 +27,12 @@ class App extends React.Component{
                     <div className="page-container">
 
                         <MainPage/>
-
+                        <StationPage/>
+                        <ClimateZonePage/>
                         <SortPage/>
                         <div className="page-section">
-                        <PlantPage/>
-                        <CropPage/>
+                            <PlantPage/>
+                            <CropPage/>
                         </div>
                         <div className="page-section">
                             <ParameterPage/>
