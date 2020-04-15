@@ -9,6 +9,7 @@ import {
     ParameterPage,
     PlantPage,
     ResearchActivePage,
+    ResearchNewPage,
     SortPage,
     StationPage,
     UnitPage
@@ -37,7 +38,9 @@ class App extends React.Component{
                                 <Route path="/station" component={StationPage}/>
                                 <Route path="/unit" component={UnitPage}/>
                                 <Route path="/parameter" component={ParameterPage}/>
+                                <Route path="/research/new" component={ResearchNewPage}/>
                                 <Route path="/research/active" component={ResearchActivePage}/>
+                                <Route path="/research/completed" component={ResearchActivePage}/>
                             </Switch>
 
                         {/*<MainPage/>*/}

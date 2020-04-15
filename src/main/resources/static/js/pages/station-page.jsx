@@ -206,8 +206,8 @@ class StationPage extends React.Component {
                         <tr key={index}>
                             <td>{index + 1 + (size * activePage)}</td>
                             <td>{item.name !== null ? item.name : null}</td>
-                            <td>{item.phone !== null ? item.phone : null}</td>
-                            <td>{item.zip !== null ? item.zip : null}</td>
+                            <td style={{width: "12rem"}}>{item.phone !== null ? item.phone : null}</td>
+                            <td style={{width: "6rem"}}>{item.zip !== null ? item.zip : null}</td>
                             <td>{item.address !== null ? item.address : null}</td>
                             <td>{item.climateZone.name !== null ? item.climateZone.name : null}</td>
                             <td style={{display: "flex", justifyContent: "flex-end"}}>

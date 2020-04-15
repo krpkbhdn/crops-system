@@ -3,6 +3,7 @@ import Table from "components/table.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faSave, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Select from "react-dropdown-select";
+import {getAllParameters} from "api/api"
 
 class ResearchActivePage extends React.Component{
     constructor() {
@@ -10,36 +11,41 @@ class ResearchActivePage extends React.Component{
         this._tbody = React.createRef();
         this.state = {
             tableTitle: "Активні дослідження",
-            column: ["#", "Parameter name", "Parameter Value", "Parameter Unit", ""],
+            column: ["#", "Назва параметру", "Значення", "Одиниця вимірювання", ""],
             control: [
                 {type: "success", event: () => this.addRecord(), content: <FontAwesomeIcon icon={faPlus}/>},
-                {type: "info", event: () => this.save(), content: <FontAwesomeIcon icon={faSave}/>}
             ],
-            tableItems: []
+            tableItems: [],
+            parameters: [],
         }
+    }
+
+    componentDidMount() {
+        this.getParameters()
     }
 
     addRecord() {
         const _select = React.createRef();
         const _input = React.createRef();
+        const key = this.state.tableItems.length;
         this.setState({
             tableItems: this.state.tableItems.concat(
                 {
-                    key: this.state.tableItems.length,
                     _select: _select,
                     _input: _input,
                     parameter:
                         <Select
                             ref={_select}
-                        placeholder={"Культура"}
-                        searchBy={ "name"}
-                        labelField= {"name"}
-                        valueField= {"id"}
-                        dropdownHeight= {"300px" }
-                        options={[{id: 1, name: "123"}, {id: 2, name: "123"}]}
-                        multi={false} />,
-                    input: <input type="text" ref={_input} />,
-                    unit: "unit"
+                            placeholder={"Параметр"}
+                            searchBy={ "name"}
+                            labelField= {"name"}
+                            valueField= {"id"}
+                            dropdownHeight= {"300px" }
+                            options={this.state.parameters}
+                            onChange={(value) => this.handlerSelect(value[0], key)}
+                            multi={false} />,
+                    input: <input type="number" ref={_input} />,
+                    unit: ""
                 }
             )
         })
@@ -50,8 +56,23 @@ class ResearchActivePage extends React.Component{
         // this.state.tableItems[0].ref.current.clearAll();
         this.state.tableItems.map(item => item !== undefined ? (
             console.log({ parameter: item._select.current.state.values[0],
-            value: item._input.current.value})
+                value: item._input.current.value})
         ) : null )
+    }
+
+    getParameters() {
+        getAllParameters().then(res => (
+            this.setState({
+                parameters: res
+            })
+        ))
+    }
+
+    handlerSelect(value, key) {
+        this.state.tableItems[key].unit = value.unit.name + ", " + value.unit.shortName;
+        this.setState({
+            tableItems: this.state.tableItems
+        });
     }
 
     removeItem(item) {
@@ -77,19 +98,22 @@ class ResearchActivePage extends React.Component{
                     <tbody ref={this._tbody}>
                     {tableItems !== undefined ? tableItems.map((item, index) =>
                         item !== undefined ?
-                        <tr key={index} >
-                            <td>{index + 1}</td>
-                            <td>{item.parameter}</td>
-                            <td>{item.input}</td>
-                            <td>{item.unit}</td>
-                            <td style={{display: "flex", justifyContent: "flex-end"}}>
-                                <button onClick={() => this.removeItem(item)} className="fab danger"><FontAwesomeIcon icon={faTrash}/></button>
-                            </td>
-                        </tr> : null
+                            <tr key={index} >
+                                <td style={{width: "5rem"}}>{index + 1}</td>
+                                <td style={{width: "30%"}}>{item.parameter}</td>
+                                <td style={{width: "15rem"}}>{item.input}</td>
+                                <td style={{width: "30%"}}>{item.unit} </td>
+                                <td style={{textAlign: "-webkit-right"}}>
+
+                                        <button onClick={() => this.removeItem(item)} className="fab danger"><FontAwesomeIcon icon={faTrash}/></button>
+                                </td>
+                            </tr> : null
                     ) : null}
 
                     </tbody>
-                    <div></div>
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <button className="btn success" onClick={() => this.save()}>Зберегти</button>
+                    </div>
                 </Table>
             </div>
         );

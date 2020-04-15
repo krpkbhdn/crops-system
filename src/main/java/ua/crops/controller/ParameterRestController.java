@@ -24,7 +24,7 @@ public class ParameterRestController {
     }
 
     @GetMapping
-    public List<Parameter> listAll(@PageableDefault Pageable pageable) {
+    public List<Parameter> listAll() {
         return parameterRepo.findAll();
     }
 

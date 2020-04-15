@@ -12,9 +12,9 @@ const sidebarMenu = [
             //     ]
             // },
             {title: 'Дослідження', icon: faFlask, links: [
-                    {name: 'Очікують початку', href: '#'},
+                    {name: 'Розпочати нове', href: '/research/new'},
                     {name: 'Активні', href: '/research/active'},
-                    {name: 'Очікують завершення', href: '#'},
+                    {name: 'Завершені', href: '/research/completed'},
                 ]
             },
             // {title: 'Реєстр', icon: faBoxes, links: [
