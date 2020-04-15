@@ -9,19 +9,22 @@ import ua.crops.entity.Research;
 import ua.crops.entity.Result;
 import ua.crops.entity.Sort;
 import ua.crops.entity.Station;
+import ua.crops.repo.ParameterRepo;
 import ua.crops.repo.ResearchRepo;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/research")
 public class ResearchRestController {
     private final ResearchRepo researchRepo;
+    private final ParameterRepo parameterRepo;
 
     @Autowired
-    public ResearchRestController(ResearchRepo researchRepo) {
+    public ResearchRestController(ResearchRepo researchRepo, ParameterRepo parameterRepo) {
         this.researchRepo = researchRepo;
+        this.parameterRepo = parameterRepo;
     }
 
     @GetMapping("page")
@@ -49,7 +52,13 @@ public class ResearchRestController {
     }
 
     @PutMapping("{id}")
-    public Research update(@PathVariable("id")  Research research, @RequestBody List<Result> results) {
-        return null;
+    public Research update(@PathVariable("id")  Research research, @RequestBody Map<String ,String> body) {
+
+        Result result = new Result();
+        Long id = Long.parseLong(body.get("param"));
+        result.setParameter(parameterRepo.findById(id).get());
+        result.setValue(Double.parseDouble(body.get("value")));
+        research.getResults().add(result);
+        return researchRepo.save(research);
     }
 }

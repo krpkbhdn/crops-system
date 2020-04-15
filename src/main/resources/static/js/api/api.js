@@ -6,3 +6,4 @@ export * from "api/api-unit";
 export * from "api/api-climate-zone";
 export * from "api/api-station";
 export * from "api/api-research";
+export * from "api/api-result";

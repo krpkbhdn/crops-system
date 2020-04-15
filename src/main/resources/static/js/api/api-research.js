@@ -24,7 +24,7 @@ async function addResearch(stationId, sortId) {
 }
 async function updateResearch(id, results) {
     let data = null;
-    await axios.put("/api/research/" + id, {results}).then(res => data = res.data)
+    await axios.put("/api/research/" + id, {param: results.parameter, value: results.value}).then(res => data = res.data)
     return data;
 }
 
