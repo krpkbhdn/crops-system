@@ -1,10 +1,10 @@
 import React from "react";
 import Table from "components/table.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faPlus, faSyncAlt, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Select from "react-dropdown-select";
 import ReactPaginate from "react-paginate"
-import {getAllParameters, getResearchById, updateResearch} from "api/api"
+import {getResearchById, getResearchParameters, updateResearch} from "api/api"
 
 class ResultsPage extends React.Component{
     constructor() {
@@ -18,6 +18,9 @@ class ResultsPage extends React.Component{
             tableItems: [],
             parameters: [],
             research: null,
+            results: [],
+            size: 10,
+            currentPage: 0,
         }
     }
 
@@ -62,16 +65,11 @@ class ResultsPage extends React.Component{
                     parameter: item._select.current.state.values[0].id,
                     value: item._input.current.value
                 })) : null );
-        this.updateState();
-    }
-
-    updateState() {
         this.setState({tableItems: []});
-        this.getResearch();
     }
 
     getParameters() {
-        getAllParameters().then(res => (
+        getResearchParameters(this.props.match.params.id).then(res => (
             this.setState({
                 parameters: res
             })
@@ -79,9 +77,10 @@ class ResultsPage extends React.Component{
     }
 
     getResearch() {
-        getResearchById(this.props.match.params.id).then(res => this.setState({
-            research: res
-        }));
+        getResearchById(this.props.match.params.id).then(res =>
+            this.setState({
+                research: res
+            }));
     }
 
     handlerSelect(value, key) {
@@ -101,14 +100,43 @@ class ResultsPage extends React.Component{
 
     }
 
+    getPageOfResults(page) {
+        this.getResearch();
+        let tr = [];
+        const { research, size } = this.state;
+        const start = size * page.selected;
+        const end = size * (page.selected + 1);
+        for( let index = start ; index < research.results.length && index < end ; index++) {
+            const item = research.results[index];
+            if (item !== undefined ) {
+                tr.push(
+                    <tr key={index} >
+                        <td style={{width: "5rem"}}>{index + 1}</td>
+                        <td style={{width: "30%"}}>{item.parameter.name}</td>
+                        <td style={{width: "15rem"}}>{item.value}</td>
+                        <td style={{width: "30%"}}>{item.parameter.unit.name} </td>
+                        <td> </td>
+                    </tr>
+                )
+            }
+        }
+
+        this.setState({
+            results: tr
+        })
+
+    }
+
     render() {
         const {
-            tableTitle,
             column,
             control,
             tableItems,
-            research
+            research,
+            results,
+            size,
         } = this.state;
+
         return (
             <div>
                 <div className="page-section">
@@ -175,22 +203,23 @@ class ResultsPage extends React.Component{
                 </div>
 
                 <div className="page-section">
-                    <Table title={"Результати дослідження"} column={column} >
+                    <Table title={"Результати дослідження"} column={results.length > 0 ? column : undefined}
+                           control={[
+                               {type: "info rotate", event: () => this.getPageOfResults({selected: 0}), content: <FontAwesomeIcon icon={faSyncAlt}/>},
+                           ]}
+                    >
+
                         <tbody >
-                        {research !== null ? research.results.map((item, index) => (
-                            item !== undefined ?
-                                <tr key={index} >
-                                    <td style={{width: "5rem"}}>{index + 1}</td>
-                                    <td style={{width: "30%"}}>{item.parameter.name}</td>
-                                    <td style={{width: "15rem"}}>{item.value}</td>
-                                    <td style={{width: "30%"}}>{item.parameter.unit.name} </td>
-                                    <td></td>
-                                </tr> : null
-                        )) : null}
-
+                        {results.length > 0 ? results.map(item => item) : null}
                         </tbody>
-                        <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <div className="pagination" style={results.length <= 0 ? {display: "none"} : null}>
+                            <ReactPaginate
+                                pageCount={research !== null ? research.results.length/size : 0}
+                                onPageChange={(page => this.getPageOfResults(page))}
+                                nextLabel='&#10095;'
+                                previousLabel='&#10094;'
 
+                            />
                         </div>
                     </Table>
                 </div>

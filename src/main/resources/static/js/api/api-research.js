@@ -14,18 +14,33 @@ async function getCountOfResearches() {
 
 async function getResearchById(id) {
     let data = null;
-    await axios.get("/api/research/" + id).then(res => data = res.data)
+    await axios.get("/api/research/" + id).then(res => data = res.data);
     return data;
 }
+
+async function getResearchParameters(id) {
+    let data = null;
+    await axios.get("/api/research/parameters/" + id).then(res => data = res.data);
+    return data;
+}
+
 async function addResearch(stationId, sortId) {
     let data = null;
-    await axios.post("/api/research/" + stationId + "/" + sortId, {name}).then(res => data = res.data)
+    await axios.post("/api/research/" + stationId + "/" + sortId, {name}).then(res => data = res.data);
     return data;
 }
 async function updateResearch(id, results) {
     let data = null;
-    await axios.put("/api/research/" + id, {param: results.parameter, value: results.value}).then(res => data = res.data)
+    await axios.put("/api/research/" + id, {param: results.parameter, value: results.value})
+        .then(res => data = res.data);
     return data;
 }
 
-export {getPageResearches, getResearchById, getCountOfResearches, addResearch, updateResearch}
+export {
+    getPageResearches,
+    getResearchById,
+    getResearchParameters,
+    getCountOfResearches,
+    addResearch,
+    updateResearch
+}

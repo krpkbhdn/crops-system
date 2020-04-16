@@ -1,6 +1,7 @@
 import React from "react";
 import Select from "react-dropdown-select";
 import {getAllStations, getAllSorts, addResearch} from "api/api";
+import Table from "components/table.jsx";
 
 class ResearchNewPage extends React.Component {
 
@@ -80,6 +81,7 @@ class ResearchNewPage extends React.Component {
                         </div>
                     </div>
                 </div>
+                {selectedStation !== null || selectedSort !== null ?
                 <div className="page-section">
                     <div className="card">
                         <div className="card-title">
@@ -118,6 +120,25 @@ class ResearchNewPage extends React.Component {
                         </div>
                     </div>
                 </div>
+                    : null}
+                {selectedSort !== null ?
+                <div className="page-section">
+
+                    <Table title={"Досліджуванні параметри"} column={["#","Назва параметру", "Одиниця вимірювання", ""]}>
+                            {selectedSort.plant.expectedParameters.map((item, index) => (
+                                <tr>
+                                    <td>{index + 1}</td>
+                                    <td>{item.parameter.name}</td>
+                                    <td>{item.parameter.unit.name}</td>
+                                    <td>{item.parameter.unit.shortName}</td>
+                                </tr>
+                            ))}
+                            <div></div>
+                    </Table>
+
+
+
+                </div> : null }
             </div>
         );
     }

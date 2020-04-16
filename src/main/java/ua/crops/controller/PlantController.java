@@ -9,18 +9,22 @@ import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.Crop;
 import ua.crops.entity.Plant;
 import ua.crops.repo.PlantRepo;
+import ua.crops.service.PlantService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/plant")
 public class PlantController {
 
     private final PlantRepo plantRepo;
+    private final PlantService plantService;
 
     @Autowired
-    public PlantController(PlantRepo plantRepo) {
+    public PlantController(PlantRepo plantRepo, PlantService plantService) {
         this.plantRepo = plantRepo;
+        this.plantService = plantService;
     }
 
     @GetMapping
@@ -48,10 +52,9 @@ public class PlantController {
         return obj;
     }
 
-    @PostMapping("{id}")
-    public Plant add(@PathVariable("id") Crop crop,@RequestBody Plant obj) {
-        obj.setCrop(crop);
-        return plantRepo.save(obj);
+    @PostMapping
+    public Plant add(@RequestBody Map<String, String> request) {
+        return plantRepo.save(plantService.parsePlant(request));
     }
 
     @PutMapping("{id}")

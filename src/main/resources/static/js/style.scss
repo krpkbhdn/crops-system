@@ -94,6 +94,14 @@ input::-webkit-inner-spin-button {
 
 }
 
+.rotate {
+  transition: 1.5s;
+}
+
+.rotate:hover {
+  transform: rotateZ(360deg);
+}
+
 .info {
   background: $info !important;
   &:hover {
@@ -118,6 +126,12 @@ input::-webkit-inner-spin-button {
   padding: .7rem 1.1rem !important;
   border-radius: $radius !important;
   border: 1px solid $grey !important;
+  .react-dropdown-select-option {
+    background: $light-three;
+    color: $dark;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+  }
   .react-dropdown-select-content{
     padding: 0;
     width: 100%;
@@ -133,6 +147,10 @@ input::-webkit-inner-spin-button {
     border: 1px solid $grey !important;
     .react-dropdown-select-item {
       font-size: 1.2rem !important;
+    }
+    .react-dropdown-select-item-selected {
+      background: $light-three;
+      color: $dark;
     }
   }
 }
@@ -523,6 +541,11 @@ input::-webkit-inner-spin-button {
     right: 0;
   }
   .modal-content {
+    max-height: 80%;
+    overflow-y: scroll;
+    &::-webkit-scrollbar{
+      display: none;
+    }
     background: $light;
     position: fixed;
     top: 10%;

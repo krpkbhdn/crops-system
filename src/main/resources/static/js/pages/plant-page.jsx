@@ -4,7 +4,7 @@ import ModalWindow from "components/modal.jsx";
 import ReactPaginate from 'react-paginate';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {addPlant, deletePlant, getAllCrops, getPagePlants, updatePlant} from 'api/api'
+import {addPlant, deletePlant, getAllCrops, getAllParameters, getPagePlants, updatePlant, updateResearch} from 'api/api'
 import Select from "react-dropdown-select";
 
 class PlantPage extends React.Component {
@@ -12,6 +12,7 @@ class PlantPage extends React.Component {
         super();
         this._modal = React.createRef();
         this._selectCrop = React.createRef();
+        this._selectParams = React.createRef();
         this.state = {
             modelIsOpen: true,
             plants: [],
@@ -31,6 +32,22 @@ class PlantPage extends React.Component {
     }
     componentDidMount() {
         this.handlePageChange(this.state.activePage);
+        this.getParameters();
+    }
+
+    getParameters() {
+        getAllParameters().then(res => (
+            this.setState({
+                parameters: res
+            })
+        ))
+    }
+
+    handlerSelect(value, key) {
+        this.state.tableItems[key].unit = value.unit.name + ", " + value.unit.shortName;
+        this.setState({
+            tableItems: this.state.tableItems
+        });
     }
 
     handlePageChange(pageNumber) {
@@ -44,16 +61,34 @@ class PlantPage extends React.Component {
     }
 
     addPlant() {
+        let params = []
         if (this.state.name.length > 0 &&
             this.state.description.length > 0 &&
-            this.state.selectedCrop !== null
+            this.state.selectedCrop !== null &&
+            this._selectParams.current.state.values.length > 0
         ) {
-            addPlant(this.state.name, this.state.description, this.state.selectedCrop.id)
-                .then(res => this.setState({
-                    plants: this.state.plants.concat(res)
-                }));
+            this._selectParams.current.state.values.map(item => params = params.concat(item.id))
+            addPlant(
+                this.state.name,
+                this.state.description,
+                this.state.selectedCrop.id,
+                params.join(";")
+            ).then(res => this.setState({
+                plants: this.state.plants.concat(res)
+            }));
             this._modal.current.closeModal();
         }
+        console.log(this._selectParams.current.state.values)
+    }
+
+    removeItemTable(item) {
+        let array = [...this.state.tableItems]; // make a separate copy of the array
+        const index = array.indexOf(item)
+        if (index !== -1) {
+            delete array[index]
+        }
+        this.setState({tableItems: array})
+
     }
 
     editPlant() {
@@ -131,12 +166,11 @@ class PlantPage extends React.Component {
     }
 
     render() {
-        const {control, selectedCrop, column, crops, plants, name, description, size, activePage, modalModeIsEdit} = this.state;
+        const {control, tableItems, selectedCrop, column, crops, plants, name, description, size, activePage, modalModeIsEdit} = this.state;
         let options = [];
         crops.map((item, index )=> (options.push({label: item.name })));
         return (
-
-
+            <div>
                 <div className="page-section">
                     <ModalWindow ref={this._modal}>
                         <div className="m-title">
@@ -157,6 +191,16 @@ class PlantPage extends React.Component {
                                         options={crops}
                                         onChange={(values) => this.handlerSelectCrop(values)}
                                         multi={false} /> : null}
+                            <Select
+                                ref={this._selectParams}
+                                placeholder={"Параметри"}
+                                searchBy={ "name"}
+                                labelField= {"name"}
+                                valueField= {"id"}
+                                dropdownHeight= {"300px" }
+                                options={this.state.parameters}
+
+                                multi={true} />
                             <textarea placeholder={"Опис"} value={description}  onChange={e => this.handlerDescription(e)} />
                         </div>
                         <div className="m-control">
@@ -195,6 +239,7 @@ class PlantPage extends React.Component {
                         </div>
                     </Table>
                 </div>
+            </div>
 
         );
     }

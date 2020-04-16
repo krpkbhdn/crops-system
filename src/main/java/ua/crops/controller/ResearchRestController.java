@@ -5,14 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-import ua.crops.entity.Research;
-import ua.crops.entity.Result;
-import ua.crops.entity.Sort;
-import ua.crops.entity.Station;
+import ua.crops.entity.*;
 import ua.crops.repo.ParameterRepo;
 import ua.crops.repo.ResearchRepo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,6 +34,18 @@ public class ResearchRestController {
     @GetMapping("{id}")
     public Research getResearchById(@PathVariable("id") Research research) {
         return research;
+    }
+
+    @GetMapping("parameters/{id}")
+    public List<Parameter> getParametersByResearch(@PathVariable("id") Research research) {
+        List<ExpectedParameter> expectedParameters = research.getSort().getPlant().getExpectedParameters();
+        List<Parameter> parameters = new ArrayList<>();
+
+        for(ExpectedParameter parameter : expectedParameters) {
+            parameters.add(parameter.getParameter());
+        }
+
+        return parameters;
     }
 
     @GetMapping("count")
