@@ -4,7 +4,7 @@ import ModalWindow from "components/modal.jsx";
 import ReactPaginate from 'react-paginate';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {addPlant, deletePlant, getAllCrops, getAllParameters, getPagePlants, updatePlant, updateResearch} from 'api/api'
+import {addPlant, deletePlant, getAllCrops, getAllParameters, getPagePlants, updatePlant} from 'api/api'
 import Select from "react-dropdown-select";
 
 class PlantPage extends React.Component {
@@ -43,13 +43,6 @@ class PlantPage extends React.Component {
         ))
     }
 
-    handlerSelect(value, key) {
-        this.state.tableItems[key].unit = value.unit.name + ", " + value.unit.shortName;
-        this.setState({
-            tableItems: this.state.tableItems
-        });
-    }
-
     handlePageChange(pageNumber) {
         getPagePlants(pageNumber.selected, this.state.size).then(res => res.data).then( data => (
             this.setState({
@@ -61,9 +54,8 @@ class PlantPage extends React.Component {
     }
 
     addPlant() {
-        let params = []
+        let params = [];
         if (this.state.name.length > 0 &&
-            this.state.description.length > 0 &&
             this.state.selectedCrop !== null &&
             this._selectParams.current.state.values.length > 0
         ) {
@@ -78,22 +70,22 @@ class PlantPage extends React.Component {
             }));
             this._modal.current.closeModal();
         }
-        console.log(this._selectParams.current.state.values)
-    }
-
-    removeItemTable(item) {
-        let array = [...this.state.tableItems]; // make a separate copy of the array
-        const index = array.indexOf(item)
-        if (index !== -1) {
-            delete array[index]
-        }
-        this.setState({tableItems: array})
-
     }
 
     editPlant() {
-        if (this.state.name.length > 0 && this.state.description.length > 0) {
-            updatePlant(this.state.selectedItem.id ,this.state.name, this.state.description).then(res => this.updateItem(res));
+        let params = [];
+        if (this.state.name.length > 0 &&
+            this.state.selectedCrop !== null &&
+            this._selectParams.current.state.values.length > 0
+        ) {
+            this._selectParams.current.state.values.map(item => params = params.concat(item.id));
+            updatePlant(
+                this.state.selectedItem.id,
+                this.state.name,
+                this.state.description,
+                this.state.selectedCrop.id,
+                params.join(";")
+            ).then(res => this.updateItem(res));
             this._modal.current.closeModal();
         }
     }
@@ -124,22 +116,29 @@ class PlantPage extends React.Component {
 
     openModal () {
         this._selectCrop.current.clearAll();
+        this._selectParams.current.clearAll();
+
         getAllCrops().then(res => (this.setState({crops: res})));
         this.setState({
             name: '',
             description: '',
-            selectedCrop: [{}],
             modalModeIsEdit: false,
         });
         this._modal.current.openModal();
     }
 
     openEditModel (item) {
-        this._selectCrop.current.clearAll();
+        let selectedParams = [];
+        item.expectedParameters.map(item => selectedParams.push(item.parameter))
+        this._selectCrop.current.setState({
+            values: [item.crop]
+        })
+        this._selectParams.current.setState({
+            values: selectedParams
+        });
         getAllCrops().then(res => (this.setState({crops: res})));
         this.setState({
             selectedItem: item,
-            selectedCrop: [item.crop],
             name: item.name,
             description: item.description,
             modalModeIsEdit: true,
@@ -172,48 +171,49 @@ class PlantPage extends React.Component {
         return (
             <div>
                 <div className="page-section">
-                    <ModalWindow ref={this._modal}>
-                        <div className="m-title">
-                            Рослина
-                        </div>
-                        <div className="m-content">
-                            <input type="text" placeholder={"Назва"} value={name} onChange={e => this.handlerName(e)}/>
-                            {
-                                !modalModeIsEdit ?
-                                    <Select
-                                        ref={this._selectCrop}
-                                        placeholder={"Культура"}
-                                        value={selectedCrop}
-                                        searchBy={ "name"}
-                                        labelField= {"name"}
-                                        valueField= {"id"}
-                                        dropdownHeight= {"300px" }
-                                        options={crops}
-                                        onChange={(values) => this.handlerSelectCrop(values)}
-                                        multi={false} /> : null}
-                            <Select
-                                ref={this._selectParams}
-                                placeholder={"Параметри"}
-                                searchBy={ "name"}
-                                labelField= {"name"}
-                                valueField= {"id"}
-                                dropdownHeight= {"300px" }
-                                options={this.state.parameters}
+                    <div className="scrollable-modal">
+                        <ModalWindow ref={this._modal}>
+                            <div className="m-title">
+                                Рослина
+                            </div>
+                            <div className="m-content">
+                                <input type="text" placeholder={"Назва"} value={name} onChange={e => this.handlerName(e)}/>
 
-                                multi={true} />
-                            <textarea placeholder={"Опис"} value={description}  onChange={e => this.handlerDescription(e)} />
-                        </div>
-                        <div className="m-control">
-                            <button className="m-btn danger" onClick={() => this._modal.current.closeModal()}>Відмінити</button>
-                            {
-                                modalModeIsEdit ?
-                                    <button className="m-btn info" onClick={() => this.editPlant()}>Змінити</button> :
-                                    <button className="m-btn success" onClick={() => this.addPlant()}>Добавити</button>
-                            }
+                                <Select
+                                    ref={this._selectCrop}
+                                    placeholder={"Культура"}
+                                    value={selectedCrop}
+                                    searchBy={ "name"}
+                                    labelField= {"name"}
+                                    valueField= {"id"}
+                                    dropdownHeight= {"300px" }
+                                    options={crops}
+                                    onChange={(values) => this.handlerSelectCrop(values)}
+                                    multi={false} />
+                                <Select
+                                    ref={this._selectParams}
+                                    placeholder={"Параметри"}
+                                    searchBy={ "name"}
+                                    labelField= {"name"}
+                                    valueField= {"id"}
+                                    dropdownHeight= {"300px" }
+                                    options={this.state.parameters}
 
-                        </div>
+                                    multi={true} />
+                                <textarea placeholder={"Опис"} value={description}  onChange={e => this.handlerDescription(e)} />
+                            </div>
+                            <div className="m-control">
+                                <button className="m-btn danger" onClick={() => this._modal.current.closeModal()}>Відмінити</button>
+                                {
+                                    modalModeIsEdit ?
+                                        <button className="m-btn info" onClick={() => this.editPlant()}>Змінити</button> :
+                                        <button className="m-btn success" onClick={() => this.addPlant()}>Добавити</button>
+                                }
 
-                    </ModalWindow>
+                            </div>
+                        </ModalWindow>
+                    </div>
+
                     <Table control={control} column={column} title={"Рослини"}>
 
                         <tbody>

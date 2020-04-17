@@ -2,6 +2,7 @@ import React from "react";
 import Select from "react-dropdown-select";
 import {getAllStations, getAllSorts, addResearch} from "api/api";
 import Table from "components/table.jsx";
+import {Redirect} from "react-router-dom";
 
 class ResearchNewPage extends React.Component {
 
@@ -12,6 +13,7 @@ class ResearchNewPage extends React.Component {
             sorts: [],
             selectedStation: null,
             selectedSort: null,
+            redirect: false,
         }
     }
 
@@ -23,7 +25,7 @@ class ResearchNewPage extends React.Component {
     addResearch() {
         const {selectedStation, selectedSort} = this.state;
         if (selectedStation !== null && selectedSort !== null) {
-            addResearch(selectedStation.id, selectedSort.id).then(res => console.log(res))
+            addResearch(selectedStation.id, selectedSort.id).then(this.setState({redirect: true}));
         }
     }
 
@@ -40,9 +42,10 @@ class ResearchNewPage extends React.Component {
     }
 
     render() {
-        const {stations, sorts, selectedStation, selectedSort} = this.state;
+        const {stations, sorts, selectedStation, selectedSort, redirect} = this.state;
         return (
             <div>
+                {redirect ?  <Redirect to="/research/active" /> : null}
                 <div className="page-section">
                     <div className="card">
                         <div className="card-title">

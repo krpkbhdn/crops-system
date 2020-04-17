@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.Crop;
+import ua.crops.entity.ExpectedParameter;
 import ua.crops.entity.Plant;
+import ua.crops.repo.ExpectedParameterRepo;
 import ua.crops.repo.PlantRepo;
 import ua.crops.service.PlantService;
 
@@ -20,11 +22,17 @@ public class PlantController {
 
     private final PlantRepo plantRepo;
     private final PlantService plantService;
+    private final ExpectedParameterRepo expectedParameterRepo;
 
     @Autowired
-    public PlantController(PlantRepo plantRepo, PlantService plantService) {
+    public PlantController(
+            PlantRepo plantRepo,
+            PlantService plantService,
+            ExpectedParameterRepo expectedParameterRepo
+    ) {
         this.plantRepo = plantRepo;
         this.plantService = plantService;
+        this.expectedParameterRepo = expectedParameterRepo;
     }
 
     @GetMapping
@@ -58,9 +66,12 @@ public class PlantController {
     }
 
     @PutMapping("{id}")
-    public Plant update(@PathVariable("id") Plant dbObj, @RequestBody Plant obj) {
-        BeanUtils.copyProperties(obj, dbObj, "id", "crop");
-        return plantRepo.save(dbObj);
+    public Plant update(@PathVariable("id") Plant dbPlant, @RequestBody Map<String, String> request) {
+        Plant plant = plantService.parsePlant(request);
+        dbPlant = plantService.copyPlantProperties(dbPlant, plant);
+        dbPlant = plantRepo.save(dbPlant);
+        expectedParameterRepo.deleteAll(expectedParameterRepo.findAllByPlantIsNull());
+        return dbPlant;
     }
 
     @DeleteMapping("{id}")

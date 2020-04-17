@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
 import {getPageResearches} from "api/api";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 class ResearchActivePage extends React.Component {
     constructor() {

@@ -1,5 +1,7 @@
 package ua.crops.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,8 +19,9 @@ public class Plant {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "crop_id")
     private Crop crop;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "plant_id")
+    @JsonManagedReference
     private List<ExpectedParameter> expectedParameters;
 
     public Plant() {

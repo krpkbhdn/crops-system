@@ -1,5 +1,7 @@
 package ua.crops.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,7 +13,11 @@ public class ExpectedParameter {
     private Long id;
     @Column(name = "expected_parameter_value")
     private Double value;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "plant_id")
+    @JsonBackReference
+    private Plant plant;
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "parameter_id")
     private Parameter parameter;
 
@@ -28,6 +34,14 @@ public class ExpectedParameter {
 
     public void setValue(Double value) {
         this.value = value;
+    }
+
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public void setPlant(Plant plant) {
+        this.plant = plant;
     }
 
     public Parameter getParameter() {
