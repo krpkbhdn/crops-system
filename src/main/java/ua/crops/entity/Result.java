@@ -1,5 +1,7 @@
 package ua.crops.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,10 @@ public class Result {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "parameter_id")
     private Parameter parameter;
+    @ManyToOne
+    @JoinColumn(name = "research_id")
+    @JsonBackReference
+    private Research research;
 
     public Result() {
     }

@@ -1,6 +1,7 @@
 package ua.crops.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,24 +10,34 @@ import java.util.List;
 @Entity
 @Table(name = "research")
 public class Research {
+
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "research_id")
     private Long id;
+
     @Column(name = "research_start_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime startDate;
+
     @Column(name = "research_end_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime endDate;
+
+    @Column(name = "research_is_completed")
+    private boolean isCompleted;
+
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "station_id")
     private Station station;
+
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "sort_id")
     private Sort sort;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "research_id")
+    @JsonManagedReference
     private List<Result> results;
 
     public Research() {
@@ -50,6 +61,14 @@ public class Research {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 
     public Station getStation() {

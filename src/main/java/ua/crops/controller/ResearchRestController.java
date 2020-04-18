@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.*;
 import ua.crops.repo.ParameterRepo;
 import ua.crops.repo.ResearchRepo;
+import ua.crops.service.ResearchService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,11 +20,17 @@ import java.util.Map;
 public class ResearchRestController {
     private final ResearchRepo researchRepo;
     private final ParameterRepo parameterRepo;
+    private final ResearchService researchService;
 
     @Autowired
-    public ResearchRestController(ResearchRepo researchRepo, ParameterRepo parameterRepo) {
+    public ResearchRestController(
+            ResearchRepo researchRepo,
+            ParameterRepo parameterRepo,
+            ResearchService researchService
+    ) {
         this.researchRepo = researchRepo;
         this.parameterRepo = parameterRepo;
+        this.researchService = researchService;
     }
 
     @GetMapping("page")
@@ -53,12 +60,19 @@ public class ResearchRestController {
         return researchRepo.count();
     }
 
+    @GetMapping("average/{id}")
+    public List<Map<String, Object>> getAverageResults(@PathVariable("id") Research research) {
+        List<Map<String, Object>> maps = researchService.getAverageParametersByResearch(research);
+        return maps;
+    }
+
     @PostMapping("{station}/{sort}")
     public Research add(@PathVariable("station") Station station, @PathVariable("sort") Sort sort) {
         Research research = new Research();
         research.setStation(station);
         research.setSort(sort);
         research.setStartDate(LocalDateTime.now());
+        research.setCompleted(false);
         return researchRepo.save(research);
     }
 

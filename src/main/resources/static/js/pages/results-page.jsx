@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faSyncAlt, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Select from "react-dropdown-select";
 import ReactPaginate from "react-paginate"
-import {getResearchById, getResearchParameters, updateResearch} from "api/api"
+import {getResearchById, getResearchParameters, updateResearch, getAverageResults} from "api/api"
 
 class ResultsPage extends React.Component{
     constructor() {
@@ -18,6 +18,7 @@ class ResultsPage extends React.Component{
             tableItems: [],
             parameters: [],
             research: null,
+            averageResults: [],
             results: [],
             size: 10,
             currentPage: 0,
@@ -27,6 +28,7 @@ class ResultsPage extends React.Component{
     componentDidMount() {
         this.getParameters();
         this.getResearch();
+        this.getAverageResults();
     }
 
     addRecord() {
@@ -66,6 +68,13 @@ class ResultsPage extends React.Component{
                     value: item._input.current.value
                 })) : null );
         this.setState({tableItems: []});
+    }
+
+    getAverageResults() {
+        getAverageResults(this.props.match.params.id).then(res => (
+            this.setState({
+                averageResults: res
+        })));
     }
 
     getParameters() {
@@ -135,46 +144,70 @@ class ResultsPage extends React.Component{
             research,
             results,
             size,
+            averageResults
         } = this.state;
-
         return (
             <div>
                 <div className="page-section">
-                    <div className="card">
-                        <div className="card-title">
-                            <h5>Інформація про дослідження</h5>
-                        </div>
-                        <div className="card-section">
-                            {research !== null ?
-                                <div className="card-container">
-                                    <div className="card-item">
-                                        <span>Кліматична зона: </span>
-                                        <span> {research.station.climateZone.name}</span>
-                                    </div>
-                                    <div className="card-item">
-                                        <span>Станція: </span>
-                                        <span>{research.station.name}</span>
-                                    </div>
-                                </div>
-                                : "" }
-                            {research !== null ?
-                                <div className="card-container">
+                    <div className="page-section">
+                        <div className="card">
+                            <div className="card-title">
+                                <h5>Інформація про дослідження</h5>
+                            </div>
+                            <div className="card-section" style={{fontSize: "1.3rem"}}>
 
-                                    <div className="card-item">
-                                        <span>Культура: </span>
-                                        <span>{research.sort.plant.crop.name}</span>
-                                    </div>
-                                    <div className="card-item">
-                                        <span>Рослина: </span>
-                                        <span>{research.sort.plant.name}</span>
-                                    </div>
-                                    <div className="card-item">
-                                        <span>Сорт: </span>
-                                        <span>{research.sort.name}</span>
-                                    </div>
-                                </div> : ""
-                            }
+                                {research !== null ?
+                                    <div className="card-container">
+                                        <div className="card-item">
+                                            <span>Кліматична зона: </span>
+                                            <span> {research.station.climateZone.name}</span>
+                                        </div>
+                                        <div className="card-item">
+                                            <span>Станція: </span>
+                                            <span>{research.station.name}</span>
+                                        </div>
+
+                                        <div className="card-item">
+                                            <span>Культура: </span>
+                                            <span>{research.sort.plant.crop.name}</span>
+                                        </div>
+                                        <div className="card-item">
+                                            <span>Рослина: </span>
+                                            <span>{research.sort.plant.name}</span>
+                                        </div>
+                                        <div className="card-item">
+                                            <span>Сорт: </span>
+                                            <span>{research.sort.name}</span>
+                                        </div>
+                                        <div className="card-item">
+                                            <span>Дата початку: </span>
+                                            <span>{research.startDate}</span>
+                                        </div>
+                                    </div> : ""
+                                }
+                            </div>
                         </div>
+                    </div>
+                    <div className="page-section" style={{flexWrap: "wrap", justifyContent: "flex-end"}}>
+
+                        {averageResults.map((item, index) =>
+
+                        <div key={index} className="info-card" style={{
+                            maxWidth: "43%",
+                            borderBottom:
+                                item.value > item.expected * 1.1 ?  ".3rem solid #0fa55a" :
+                                    item.value < item.expected - item.expected * 0.1 ?  ".3rem solid #bf393b" :
+                                        ".3rem solid #d99234"
+                        }}>
+                            <div  className="card-title">
+                                <h5>{item.param.name}</h5>
+                            </div>
+                            <div className="card-info">
+                                <span>{item.value.toFixed(1)}</span>
+                                {item.param.unit.shortName}
+                            </div>
+                        </div>
+                        )}
                     </div>
                 </div>
 

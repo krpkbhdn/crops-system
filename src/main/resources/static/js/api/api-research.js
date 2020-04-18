@@ -12,6 +12,12 @@ async function getCountOfResearches() {
     return data;
 }
 
+async function getAverageResults(researchId) {
+    let data = null;
+    await axios.get("/api/research/average/" + researchId).then(res => data = res.data);
+    return data;
+}
+
 async function getResearchById(id) {
     let data = null;
     await axios.get("/api/research/" + id).then(res => data = res.data);
@@ -40,6 +46,7 @@ export {
     getPageResearches,
     getResearchById,
     getResearchParameters,
+    getAverageResults,
     getCountOfResearches,
     addResearch,
     updateResearch
