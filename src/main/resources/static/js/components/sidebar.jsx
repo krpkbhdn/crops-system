@@ -107,7 +107,7 @@ class SidebarCollapse extends React.Component {
 
     componentDidMount() {
         this.setState({
-            componentHeight: this.listRef.current.clientHeight + 'px'
+            componentHeight: this.listRef.current.clientHeight + (this.props.section.links.length * 4) + 'px'
         })
     }
 

@@ -30,6 +30,12 @@ async function getResearchParameters(id) {
     return data;
 }
 
+async function getDurationOfResearch(id) {
+    let data = null;
+    await axios.get("/api/research/duration/" + id).then(res => data = res.data);
+    return data;
+}
+
 async function addResearch(stationId, sortId) {
     let data = null;
     await axios.post("/api/research/" + stationId + "/" + sortId, {name}).then(res => data = res.data);
@@ -48,6 +54,7 @@ export {
     getResearchParameters,
     getAverageResults,
     getCountOfResearches,
+    getDurationOfResearch,
     addResearch,
     updateResearch
 }

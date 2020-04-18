@@ -1,14 +1,22 @@
 import React from "react";
 import Table from "components/table.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faSyncAlt, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faPlus, faSyncAlt, faTrash, faCheck, faExclamation, faTimes} from "@fortawesome/free-solid-svg-icons";
 import Select from "react-dropdown-select";
-import ReactPaginate from "react-paginate"
-import {getResearchById, getResearchParameters, updateResearch, getAverageResults} from "api/api"
+import ReactPaginate from "react-paginate";
+import ModalWindow from "components/modal.jsx";
+import {
+    getAverageResults,
+    getDurationOfResearch,
+    getResearchById,
+    getResearchParameters,
+    updateResearch
+} from "api/api";
 
 class ResultsPage extends React.Component{
     constructor() {
         super();
+        this._modal = React.createRef();
         this.state = {
             tableTitle: "Активні дослідження",
             column: ["#", "Назва параметру", "Значення", "Одиниця вимірювання", ""],
@@ -20,6 +28,8 @@ class ResultsPage extends React.Component{
             research: null,
             averageResults: [],
             results: [],
+            duration: '',
+            notResearched: [],
             size: 10,
             currentPage: 0,
         }
@@ -29,6 +39,7 @@ class ResultsPage extends React.Component{
         this.getParameters();
         this.getResearch();
         this.getAverageResults();
+        this.getDurationOfResearch()
     }
 
     addRecord() {
@@ -74,7 +85,7 @@ class ResultsPage extends React.Component{
         getAverageResults(this.props.match.params.id).then(res => (
             this.setState({
                 averageResults: res
-        })));
+            })));
     }
 
     getParameters() {
@@ -91,6 +102,36 @@ class ResultsPage extends React.Component{
                 research: res
             }));
     }
+
+    getDurationOfResearch() {
+        getDurationOfResearch(this.props.match.params.id).then(res =>
+            this.setState({
+                duration: res
+            })
+        )
+    }
+
+    notResearchedParams() {
+        this._modal.current.openModal();
+        let isExist = false;
+        let el = [];
+        const {parameters, averageResults} = this.state;
+        parameters.map(param => (
+            averageResults.map( aParam => param.id === aParam.param.id ? isExist = true : null),
+            !isExist ? el = el.concat(param.name) : null,
+            isExist = false
+        ));
+        return el;
+    }
+
+    openModal() {
+        let arr = [];
+        this.setState({
+            notResearched: this.notResearchedParams()
+        });
+        this._modal.current.openModal();
+    }
+
 
     handlerSelect(value, key) {
         this.state.tableItems[key].unit = value.unit.name + ", " + value.unit.shortName;
@@ -144,10 +185,105 @@ class ResultsPage extends React.Component{
             research,
             results,
             size,
-            averageResults
+            duration,
+            averageResults,
+            notResearched
         } = this.state;
         return (
             <div>
+                <div className="m-large">
+                    <ModalWindow ref={this._modal}>
+                        <div className="m-title">
+                            Завершення дослідження
+                        </div>
+                        {research !== null ?
+                            <div className="m-content">
+                                <div className="m-item">
+                                    <h5>
+                                        Дослідження тривало (діб):
+                                    </h5>
+                                    <span>{duration}</span>
+                                </div>
+                                <div className="m-item">
+                                    <h5>
+                                        Дослідження проходило у кліматичній зоні
+                                    </h5>
+                                    <span>{research.station.climateZone.name}</span>
+                                    <h5>
+                                        на станції
+                                    </h5>
+                                    <span>{research.station.name}</span>
+                                </div>
+
+                                <div className="m-item">
+                                    <h5>
+                                        Досліджувався сорт
+                                    </h5>
+                                    <span>{research.sort.name}</span>
+                                    <h5>
+                                        рослини
+                                    </h5>
+                                    <span>{research.sort.plant.name}</span>
+                                    <h5>
+                                        культури
+                                    </h5>
+                                    <span>{research.sort.plant.crop.name}</span>
+                                </div>
+
+                                <div className="m-item" style={{flexDirection: "column"}}>
+                                    <h4 className="m-subtitle">
+                                        Результати дослідження
+                                    </h4>
+                                    <table className="m-table">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Параметер</th>
+                                            <th>Значення</th>
+                                            <th>Очікувалось</th>
+                                            <th> </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {averageResults.length > 0 ? averageResults.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.param.name + " (" + item.param.unit.shortName + ")"}</td>
+                                                <td>{item.value.toFixed(1)}</td>
+                                                <td>{item.expected}</td>
+                                                <td>
+                                                    {item.value > item.expected * 1.1 ?
+                                                        <span className="indicator indicator-success">
+                                                            <FontAwesomeIcon icon={faCheck}/>
+                                                        </span> :
+                                                        item.value < item.expected - item.expected * 0.1 ?
+                                                            <span className="indicator indicator-danger">
+                                                                <FontAwesomeIcon icon={faTimes}/>
+                                                            </span> :
+                                                            <span className="indicator indicator-warning">
+                                                                <FontAwesomeIcon icon={faExclamation}/>
+                                                            </span>}
+                                                </td>
+                                            </tr>
+                                        )) : null}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {notResearched.length > 0 ?
+                                <div className="m-item" >
+                                    <h5>Параметри які не були дослідженні: </h5>
+                                    {notResearched.join(", ")}
+                                </div> : null}
+                            </div>
+                            : null}
+                        <div className="m-control">
+                            <button className="m-btn danger">Скасувати</button>
+                            <button className="m-btn warning">Завершити</button>
+                            <button className="m-btn success">Завершити та добавити в реєстр</button>
+                        </div>
+                    </ModalWindow>
+                </div>
+
                 <div className="page-section">
                     <div className="page-section">
                         <div className="card">
@@ -183,6 +319,18 @@ class ResultsPage extends React.Component{
                                             <span>Дата початку: </span>
                                             <span>{research.startDate}</span>
                                         </div>
+                                        <div className="card-item">
+                                            <span>Дослідження триває (діб): </span>
+                                            <span>{duration}</span>
+                                        </div>
+                                        <div className="card-item" style={{textAlign: "end"}}>
+                                            <button
+                                                className="btn info"
+                                                onClick={() => this.openModal()}
+                                            >
+                                                Завершити
+                                            </button>
+                                        </div>
                                     </div> : ""
                                 }
                             </div>
@@ -192,21 +340,21 @@ class ResultsPage extends React.Component{
 
                         {averageResults.map((item, index) =>
 
-                        <div key={index} className="info-card" style={{
-                            maxWidth: "43%",
-                            borderBottom:
-                                item.value > item.expected * 1.1 ?  ".3rem solid #0fa55a" :
-                                    item.value < item.expected - item.expected * 0.1 ?  ".3rem solid #bf393b" :
-                                        ".3rem solid #d99234"
-                        }}>
-                            <div  className="card-title">
-                                <h5>{item.param.name}</h5>
+                            <div key={index} className="info-card" style={{
+                                maxWidth: "43%",
+                                borderBottom:
+                                    item.value > item.expected * 1.1 ?  ".3rem solid #0fa55a" :
+                                        item.value < item.expected - item.expected * 0.1 ?  ".3rem solid #bf393b" :
+                                            ".3rem solid #d99234"
+                            }}>
+                                <div  className="card-title">
+                                    <h5>{item.param.name}</h5>
+                                </div>
+                                <div className="card-info">
+                                    <span>{item.value.toFixed(1)}</span>
+                                    {item.param.unit.shortName}
+                                </div>
                             </div>
-                            <div className="card-info">
-                                <span>{item.value.toFixed(1)}</span>
-                                {item.param.unit.shortName}
-                            </div>
-                        </div>
                         )}
                     </div>
                 </div>

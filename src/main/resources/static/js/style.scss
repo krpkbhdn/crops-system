@@ -16,6 +16,8 @@ $success: #4be198;
 $success-active: #0fa55a;
 $danger: #f48683;
 $danger-active: #bf393b;
+$warning: #ffcf78;
+$warning-active: #e1a645;
 
 $focus-color: #d99234;
 $focus-shadow: 0px 0px 4px 0px $focus-color;
@@ -108,7 +110,12 @@ input::-webkit-inner-spin-button {
     background: $info-active !important;
   }
 }
-
+.warning {
+  background: $warning !important;
+  &:hover {
+    background: $warning-active !important;
+  }
+}
 .success {
   background: $success !important;
   &:hover {
@@ -120,6 +127,28 @@ input::-webkit-inner-spin-button {
   &:hover {
     background: $danger-active !important;
   }
+}
+
+.indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 50%;
+  font-size: .9rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: $light;
+}
+
+.indicator-warning {
+  background: $warning-active !important;
+}
+.indicator-success {
+  background:  $success-active !important;
+}
+.indicator-danger {
+  background: $danger-active !important;
 }
 
 .react-dropdown-select {
@@ -193,7 +222,7 @@ input::-webkit-inner-spin-button {
   align-items: center;
   font-size: 1rem;
   height: 4rem;
-  z-index: 9999;
+  z-index: 999;
   opacity: 1;
   .nav-menu{
     display: flex;
@@ -339,25 +368,24 @@ input::-webkit-inner-spin-button {
   }
   .collapse-container {
     display: flex;
-    height: 0;
     overflow: hidden;
     flex-direction: column;
     margin: 0;
-    padding: 0;
     transition: .5s;
     ul {
       display: flex;
       flex-direction: column;
       border-left: .1rem solid $dark-three;
       margin-left: 1rem;
-      padding: .3rem 0 .7rem .5rem;
+      padding: .3rem 0 .3rem .5rem;
       li {
+        display: block;
         margin: 0;
         padding: 0;
       }
     }
     a {
-      display: flex;
+      display: block;
       color: inherit;
       padding: .3rem .5rem;
       margin: .2rem 0;
@@ -460,6 +488,7 @@ input::-webkit-inner-spin-button {
   }
 }
 
+
 .card {
   max-width: 100%;
   width: 100%;
@@ -542,7 +571,7 @@ input::-webkit-inner-spin-button {
 }
 
 .modal-window {
-  z-index: 999;
+  z-index: 999  ;
 
   .modal-back{
     background: $dark-three;
@@ -553,10 +582,11 @@ input::-webkit-inner-spin-button {
     left: 0;
     right: 0;
   }
+
   .modal-content {
     background: $light;
     position: fixed;
-    top: 10%;
+    top: 5rem;
     left: calc(50% - (30% / 2));
     width: 30%;
     padding: 1.5rem;
@@ -569,6 +599,18 @@ input::-webkit-inner-spin-button {
       font-weight: 600;
     }
 
+    .m-subtitle {
+      display: flex;
+      margin: .5rem 0;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+
+    .m-info {
+      margin: 0 .2rem;
+      font-size: 1.3rem;
+    }
+
     .m-content {
       margin-bottom: 1rem;
     }
@@ -577,9 +619,51 @@ input::-webkit-inner-spin-button {
       margin-bottom: 1rem;
     }
 
+    .m-item {
+      display: flex;
+      margin-bottom: .5rem;
+      h5 {
+        margin: 0 .5rem 0 0;
+        font-size: 1rem;
+        font-weight: normal;
+      }
+      span {
+        text-transform: uppercase;
+        margin-right: .5rem;
+        font-weight: 600;
+      }
+    }
+
     .m-control {
       margin-bottom: 1rem;
       text-align: right;
+    }
+  }
+
+  .m-table {
+    color: $dark;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 1rem;
+
+    thead {
+      border-bottom: 1px solid $dark-three;
+      tr {
+        th {
+          text-align: left;
+
+        }
+      }
+    }
+    tbody {
+      border-bottom: 1px solid $dark-three;
+      tr {
+        td {
+          padding: .3rem .3rem .3rem 0;
+        }
+      }
     }
   }
 
@@ -588,6 +672,13 @@ input::-webkit-inner-spin-button {
     min-height: 200px;
     max-width: 100%;
     min-width: 100%;
+  }
+}
+
+.m-large {
+  .modal-content {
+    left: calc(50% - (70% / 2));
+    width: 70%;
   }
 }
 

@@ -10,7 +10,9 @@ import ua.crops.repo.ParameterRepo;
 import ua.crops.repo.ResearchRepo;
 import ua.crops.service.ResearchService;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +49,9 @@ public class ResearchRestController {
     public List<Parameter> getParametersByResearch(@PathVariable("id") Research research) {
         List<ExpectedParameter> expectedParameters = research.getSort().getPlant().getExpectedParameters();
         List<Parameter> parameters = new ArrayList<>();
-
         for(ExpectedParameter parameter : expectedParameters) {
             parameters.add(parameter.getParameter());
         }
-
         return parameters;
     }
 
@@ -62,9 +62,15 @@ public class ResearchRestController {
 
     @GetMapping("average/{id}")
     public List<Map<String, Object>> getAverageResults(@PathVariable("id") Research research) {
-        List<Map<String, Object>> maps = researchService.getAverageParametersByResearch(research);
-        return maps;
+        return researchService.getAverageParametersByResearch(research);
     }
+
+    @GetMapping("duration/{id}")
+    public long getDuration(@PathVariable("id") Research research) {
+        Duration duration = Duration.between(research.getStartDate(), LocalDateTime.now());
+        return duration.toDays();
+    }
+
 
     @PostMapping("{station}/{sort}")
     public Research add(@PathVariable("station") Station station, @PathVariable("sort") Sort sort) {
