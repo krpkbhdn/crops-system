@@ -32,6 +32,7 @@ class ResultsPage extends React.Component{
             notResearched: [],
             size: 10,
             currentPage: 0,
+            lowerAverage: 0,
         }
     }
 
@@ -118,16 +119,25 @@ class ResultsPage extends React.Component{
         const {parameters, averageResults} = this.state;
         parameters.map(param => (
             averageResults.map( aParam => param.id === aParam.param.id ? isExist = true : null),
-            !isExist ? el = el.concat(param.name) : null,
-            isExist = false
+                !isExist ? el = el.concat(param.name) : null,
+                isExist = false
         ));
         return el;
     }
 
+    getCountLowerParam() {
+        let count = 0;
+        this.state.averageResults.map((item, index) => (
+            item.value < item.expected ? count++ : null));
+        return count;
+    }
+
+
     openModal() {
         let arr = [];
         this.setState({
-            notResearched: this.notResearchedParams()
+            notResearched: this.notResearchedParams(),
+            lowerAverage: this.getCountLowerParam()
         });
         this._modal.current.openModal();
     }
@@ -147,7 +157,6 @@ class ResultsPage extends React.Component{
             delete array[index]
         }
         this.setState({tableItems: array})
-
     }
 
     getPageOfResults(page) {
@@ -184,10 +193,12 @@ class ResultsPage extends React.Component{
             tableItems,
             research,
             results,
+            parameters,
             size,
             duration,
             averageResults,
-            notResearched
+            lowerAverage,
+            notResearched,
         } = this.state;
         return (
             <div>
@@ -252,11 +263,11 @@ class ResultsPage extends React.Component{
                                                 <td>{item.value.toFixed(1)}</td>
                                                 <td>{item.expected}</td>
                                                 <td>
-                                                    {item.value > item.expected * 1.1 ?
+                                                    {item.value > item.expected ?
                                                         <span className="indicator indicator-success">
                                                             <FontAwesomeIcon icon={faCheck}/>
                                                         </span> :
-                                                        item.value < item.expected - item.expected * 0.1 ?
+                                                        item.value < item.expected - item.expected * 0.2 ?
                                                             <span className="indicator indicator-danger">
                                                                 <FontAwesomeIcon icon={faTimes}/>
                                                             </span> :
@@ -270,10 +281,55 @@ class ResultsPage extends React.Component{
                                     </table>
                                 </div>
                                 {notResearched.length > 0 ?
+                                    <div className="m-item" >
+                                        <h5>Параметри які не були дослідженні: </h5>
+                                        {notResearched.join(", ")}
+                                    </div> : null}
+
                                 <div className="m-item" >
-                                    <h5>Параметри які не були дослідженні: </h5>
-                                    {notResearched.join(", ")}
-                                </div> : null}
+
+                                    { duration > 960 && notResearched.length === 0 && lowerAverage === 0 ?
+                                        <div style={{color: "#0fa55a"}}>
+                                             <span style={{display: "flex", alignItems: "center"}}>
+                                                 <span className="indicator indicator-success">
+                                                     <FontAwesomeIcon icon={faCheck}/>
+                                                 </span>
+                                                Добавлення в реєстер рекомедується
+                                            </span>
+                                        </div> :
+
+                                        duration > 960 && notResearched.length <= parameters.length / 3 && lowerAverage <= parameters.length / 3 ?
+                                            <div style={{color: "#e1a645"}}>
+                                            <span style={{display: "flex", alignItems: "center"}}>
+                                                 <span className="indicator indicator-warning">
+                                                     <FontAwesomeIcon icon={faExclamation}/>
+                                                 </span>
+                                                Слід звернути увагу:
+                                            </span>
+                                                <ul className="info-list">
+                                                    { lowerAverage <= parameters.length / 3 && lowerAverage > 0 ? <li>Деякі параметри нижчі очікуваних</li> : null}
+                                                    { notResearched.length > 0 ? <li>Деякі параметри не дослідженні</li> : null}
+                                                </ul>
+                                            </div> :
+
+                                            <div style={{color: "#bf393b"}}>
+                                             <span style={{display: "flex", alignItems: "center"}}>
+                                                 <span className="indicator indicator-danger">
+                                                     <FontAwesomeIcon icon={faTimes}/>
+                                                 </span>
+                                                Добавлення в реєстер не рекомедується:
+                                            </span>
+                                                <ul className="info-list">
+                                                    { duration < 960 ?  <li>Дослідження тривало менше 3 років</li> : null}
+                                                    { notResearched.length > parameters.length / 3 ? <li>Значна частина параметрів не досліджені</li> : null}
+                                                    { lowerAverage > parameters.length / 3 ? <li>Параметри нижчі очікуваних</li> : null}
+                                                </ul>
+                                            </div>
+
+                                    }
+
+                                </div>
+
                             </div>
                             : null}
                         <div className="m-control">
@@ -284,7 +340,6 @@ class ResultsPage extends React.Component{
                     </ModalWindow>
                 </div>
 
-                <div className="page-section">
                     <div className="page-section">
                         <div className="card">
                             <div className="card-title">
@@ -293,7 +348,13 @@ class ResultsPage extends React.Component{
                             <div className="card-section" style={{fontSize: "1.3rem"}}>
 
                                 {research !== null ?
-                                    <div className="card-container">
+                                    <div className="page-section">
+                                        <div className="card-container">
+                                            <div className="card-item">
+                                                <span>Дата початку: </span>
+                                                <span>{research.startDate}</span>
+                                            </div>
+
                                         <div className="card-item">
                                             <span>Кліматична зона: </span>
                                             <span> {research.station.climateZone.name}</span>
@@ -303,10 +364,15 @@ class ResultsPage extends React.Component{
                                             <span>{research.station.name}</span>
                                         </div>
 
-                                        <div className="card-item">
-                                            <span>Культура: </span>
-                                            <span>{research.sort.plant.crop.name}</span>
+
                                         </div>
+
+                                            <div className="card-container">
+                                                <div className="card-item">
+                                                    <span>Дослідження триває (діб): </span>
+                                                    <span>{duration}</span>
+                                                </div>
+
                                         <div className="card-item">
                                             <span>Рослина: </span>
                                             <span>{research.sort.plant.name}</span>
@@ -315,14 +381,7 @@ class ResultsPage extends React.Component{
                                             <span>Сорт: </span>
                                             <span>{research.sort.name}</span>
                                         </div>
-                                        <div className="card-item">
-                                            <span>Дата початку: </span>
-                                            <span>{research.startDate}</span>
-                                        </div>
-                                        <div className="card-item">
-                                            <span>Дослідження триває (діб): </span>
-                                            <span>{duration}</span>
-                                        </div>
+
                                         <div className="card-item" style={{textAlign: "end"}}>
                                             <button
                                                 className="btn info"
@@ -331,20 +390,20 @@ class ResultsPage extends React.Component{
                                                 Завершити
                                             </button>
                                         </div>
+                                        </div>
                                     </div> : ""
                                 }
                             </div>
                         </div>
                     </div>
-                    <div className="page-section" style={{flexWrap: "wrap", justifyContent: "flex-end"}}>
+                    <div className="page-section" style={{flexWrap: "wrap"}}>
 
                         {averageResults.map((item, index) =>
 
                             <div key={index} className="info-card" style={{
-                                maxWidth: "43%",
                                 borderBottom:
-                                    item.value > item.expected * 1.1 ?  ".3rem solid #0fa55a" :
-                                        item.value < item.expected - item.expected * 0.1 ?  ".3rem solid #bf393b" :
+                                    item.value > item.expected ?  ".3rem solid #0fa55a" :
+                                        item.value < item.expected - item.expected * 0.2 ?  ".3rem solid #bf393b" :
                                             ".3rem solid #d99234"
                             }}>
                                 <div  className="card-title">
@@ -357,7 +416,6 @@ class ResultsPage extends React.Component{
                             </div>
                         )}
                     </div>
-                </div>
 
                 <div className="page-section">
                     <Table title={"Внести результати дослідження"} column={column} control={control}>

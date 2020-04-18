@@ -509,6 +509,8 @@ input::-webkit-inner-spin-button {
     }
   }
   .card-container {
+    display: flex;
+    flex-direction: column;
     width: 100%;
   }
   .card-item {
@@ -520,8 +522,12 @@ input::-webkit-inner-spin-button {
 }
 
 .info-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   max-width: 100%;
-  width: 100%;
+  width: calc(20% - 2rem);
   margin: $block-margin;
   background: $light;
   border-radius: $radius;
@@ -571,7 +577,7 @@ input::-webkit-inner-spin-button {
 }
 
 .modal-window {
-  z-index: 999  ;
+  z-index: 999;
 
   .modal-back{
     background: $dark-three;
@@ -612,7 +618,7 @@ input::-webkit-inner-spin-button {
     }
 
     .m-content {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .m-content>* {
@@ -665,6 +671,11 @@ input::-webkit-inner-spin-button {
         }
       }
     }
+  }
+
+  .info-list {
+    list-style: disc inside;
+    margin-left: 2.1rem;
   }
 
   textarea {

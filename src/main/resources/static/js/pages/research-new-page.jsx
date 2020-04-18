@@ -128,14 +128,16 @@ class ResearchNewPage extends React.Component {
                 <div className="page-section">
 
                     <Table title={"Досліджуванні параметри"} column={["#","Назва параметру", "Одиниця вимірювання", ""]}>
+                        <tbody>
                             {selectedSort.plant.expectedParameters.map((item, index) => (
-                                <tr>
+                                <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>{item.parameter.name}</td>
                                     <td>{item.parameter.unit.name}</td>
                                     <td>{item.parameter.unit.shortName}</td>
                                 </tr>
                             ))}
+                        </tbody>
                             <div></div>
                     </Table>
 
