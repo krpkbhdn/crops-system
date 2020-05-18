@@ -25,10 +25,7 @@ public class Sort {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "sort_id")
     private List<Register> register;
-    @OneToMany
-    @JoinColumn(name = "sort_id")
-    @JsonBackReference
-    private List<Research> researches;
+
     public Sort() {
     }
 
@@ -76,11 +73,4 @@ public class Sort {
         this.register = register;
     }
 
-    public List<Research> getResearches() {
-        return researches;
-    }
-
-    public void setResearches(List<Research> researches) {
-        this.researches = researches;
-    }
 }

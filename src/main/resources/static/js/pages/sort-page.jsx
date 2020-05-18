@@ -47,12 +47,11 @@ class SortPage extends React.Component {
 
     addSort() {
         if (this.state.name.length > 0 &&
-            this.state.description.length > 0 &&
             this.state.selectedPlant !== null
         ) {
             addSort(
                 this.state.name,
-                this.state.description,
+                this.state.description !== null ? this.state.description : "",
                 this.state.img,
                 this.state.selectedPlant.id
             ).then(res => this.setState({

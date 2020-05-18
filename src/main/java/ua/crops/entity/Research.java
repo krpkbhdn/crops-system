@@ -34,7 +34,6 @@ public class Research {
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "sort_id")
-    @JsonManagedReference
     private Sort sort;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

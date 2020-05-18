@@ -1,17 +1,17 @@
 import React from "react";
 import Table from "components/table.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faSyncAlt, faTrash, faCheck, faExclamation, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faExclamation, faPlus, faSyncAlt, faTimes, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Select from "react-dropdown-select";
 import ReactPaginate from "react-paginate";
 import ModalWindow from "components/modal.jsx";
 import {
+    completeResearch,
     getAverageResults,
     getDurationOfResearch,
     getResearchById,
     getResearchParameters,
-    updateResearch,
-    completeResearch
+    updateResearch
 } from "api/api";
 import {Redirect} from "react-router-dom";
 

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.*;
 import ua.crops.repo.ParameterRepo;
 import ua.crops.repo.ResearchRepo;
-import ua.crops.repo.SortRepo;
 import ua.crops.service.ResearchService;
 
 import java.time.Duration;
@@ -39,6 +38,7 @@ public class ResearchRestController {
     public Page<Research> page(@PageableDefault Pageable pageable) {
         return researchRepo.findAll(pageable);
     }
+
     @GetMapping("page/{isCompleted}")
     public Page<Research> page(@PathVariable("isCompleted") boolean isCompleted, @PageableDefault Pageable pageable) {
         return researchRepo.getAllByCompletedIs(pageable, isCompleted);

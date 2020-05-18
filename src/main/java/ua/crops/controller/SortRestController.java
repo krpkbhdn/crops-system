@@ -1,6 +1,7 @@
 package ua.crops.controller;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -8,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.Plant;
 import ua.crops.entity.Sort;
 import ua.crops.repo.SortRepo;
+import ua.crops.service.ResearchService;
 import ua.crops.service.SortService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -18,10 +21,13 @@ import java.util.Set;
 public class SortRestController {
     private final SortRepo sortRepo;
     private final SortService sortService;
+    private final ResearchService researchService;
 
-    public SortRestController(SortRepo sortRepo, SortService sortService) {
+    @Autowired
+    public SortRestController(SortRepo sortRepo, SortService sortService, ResearchService researchService) {
         this.sortRepo = sortRepo;
         this.sortService = sortService;
+        this.researchService = researchService;
     }
 
     @GetMapping
@@ -42,6 +48,11 @@ public class SortRestController {
     @GetMapping("completed")
     public Set<Sort> getAllWhereIsCompletedResearch() {
         return sortService.getAllByCompletedResearches();
+    }
+
+    @GetMapping("summary/{id}")
+    public List<Map<String, Object>> getSummary(@PathVariable("id") Sort sort) {
+        return researchService.getSummaryOfSortResearches(sort);
     }
 
     @GetMapping("{id}")
