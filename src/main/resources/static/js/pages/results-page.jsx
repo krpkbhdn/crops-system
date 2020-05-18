@@ -10,8 +10,10 @@ import {
     getDurationOfResearch,
     getResearchById,
     getResearchParameters,
-    updateResearch
+    updateResearch,
+    completeResearch
 } from "api/api";
+import {Redirect} from "react-router-dom";
 
 class ResultsPage extends React.Component{
     constructor() {
@@ -33,6 +35,7 @@ class ResultsPage extends React.Component{
             size: 10,
             currentPage: 0,
             lowerAverage: 0,
+            redirect: false,
         }
     }
 
@@ -80,6 +83,11 @@ class ResultsPage extends React.Component{
                     value: item._input.current.value
                 })) : null );
         this.setState({tableItems: []});
+    }
+
+    completeResearch() {
+        completeResearch(this.props.match.params.id).then(res =>
+            res.status === 200 ? this.setState({redirect: true}) : null );
     }
 
     getAverageResults() {
@@ -199,9 +207,11 @@ class ResultsPage extends React.Component{
             averageResults,
             lowerAverage,
             notResearched,
+            redirect
         } = this.state;
         return (
             <div>
+                {redirect ? <Redirect to="/research/completed"/> : null}
                 <div className="m-large">
                     <ModalWindow ref={this._modal}>
                         <div className="m-title">
@@ -294,7 +304,7 @@ class ResultsPage extends React.Component{
                                                  <span className="indicator indicator-success">
                                                      <FontAwesomeIcon icon={faCheck}/>
                                                  </span>
-                                                Добавлення в реєстер рекомедується
+                                                Дослідження готове до завершення
                                             </span>
                                         </div> :
 
@@ -317,7 +327,7 @@ class ResultsPage extends React.Component{
                                                  <span className="indicator indicator-danger">
                                                      <FontAwesomeIcon icon={faTimes}/>
                                                  </span>
-                                                Добавлення в реєстер не рекомедується:
+                                                Завершення дослідження не рекомедується:
                                             </span>
                                                 <ul className="info-list">
                                                     { duration < 960 ?  <li>Дослідження тривало менше 3 років</li> : null}
@@ -333,9 +343,9 @@ class ResultsPage extends React.Component{
                             </div>
                             : null}
                         <div className="m-control">
-                            <button className="m-btn danger">Скасувати</button>
-                            <button className="m-btn warning">Завершити</button>
-                            <button className="m-btn success">Завершити та добавити в реєстр</button>
+                            <button  onClick={() => this._modal.current.closeModal()} className="m-btn danger">Скасувати</button>
+                            <button onClick={() => this.completeResearch()} className="m-btn success">Завершити</button>
+
                         </div>
                     </ModalWindow>
                 </div>

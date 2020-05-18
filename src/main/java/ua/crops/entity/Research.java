@@ -1,5 +1,6 @@
 package ua.crops.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -25,7 +26,7 @@ public class Research {
     private LocalDateTime endDate;
 
     @Column(name = "research_is_completed")
-    private boolean isCompleted;
+    private boolean completed;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "station_id")
@@ -33,6 +34,7 @@ public class Research {
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "sort_id")
+    @JsonManagedReference
     private Sort sort;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -64,11 +66,11 @@ public class Research {
     }
 
     public boolean isCompleted() {
-        return isCompleted;
+        return completed;
     }
 
     public void setCompleted(boolean completed) {
-        isCompleted = completed;
+        this.completed = completed;
     }
 
     public Station getStation() {

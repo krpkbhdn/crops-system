@@ -18,6 +18,12 @@ async function getCountOfSorts() {
     return data;
 }
 
+async function getSortsWhereIsCompletedResearch() {
+    let data = null;
+    await axios.get('/api/sort/completed').then(res => data = res);
+    return data;
+}
+
 async function getSortById(id) {
     let data = null;
     await axios.get("/api/sort/" + id).then(res => data = res.data)
@@ -40,4 +46,4 @@ async function deleteSort(id) {
 }
 
 
-export {getAllSorts, getPageSorts, getCountOfSorts, getSortById, addSort, updateSort, deleteSort}
+export {getAllSorts, getPageSorts, getSortsWhereIsCompletedResearch, getCountOfSorts, getSortById, addSort, updateSort, deleteSort}

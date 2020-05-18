@@ -6,6 +6,12 @@ async function getPageResearches(page, size) {
     return data;
 }
 
+async function getPageCompletedResearches(page, size, isCompleted) {
+    let data = null;
+    await axios.get('/api/research/page/' + isCompleted, { params: { page: page, size: size }}).then(res => data = res);
+    return data;
+}
+
 async function getCountOfResearches() {
     let data = null;
     await axios.get('/api/research/count').then(res => data = res);
@@ -48,13 +54,22 @@ async function updateResearch(id, results) {
     return data;
 }
 
+async function completeResearch(id) {
+    let data = null;
+    await axios.put("/api/research/complete/" + id)
+        .then(res => data = res);
+    return data;
+}
+
 export {
     getPageResearches,
+    getPageCompletedResearches,
     getResearchById,
     getResearchParameters,
     getAverageResults,
     getCountOfResearches,
     getDurationOfResearch,
     addResearch,
-    updateResearch
+    updateResearch,
+    completeResearch
 }

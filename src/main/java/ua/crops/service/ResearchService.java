@@ -3,7 +3,6 @@ package ua.crops.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.crops.entity.ExpectedParameter;
-import ua.crops.entity.Parameter;
 import ua.crops.entity.Research;
 import ua.crops.entity.Result;
 import ua.crops.repo.ResearchRepo;

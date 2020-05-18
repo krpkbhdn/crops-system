@@ -21,7 +21,7 @@ class PlantPage extends React.Component {
             ],
             column: ["#", "Назва", "Культура",""],
             activePage: 0,
-            size: 4,
+            size: 5,
             pageCount: 0,
             name: '',
             description: '',

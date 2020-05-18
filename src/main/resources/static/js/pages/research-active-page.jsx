@@ -3,7 +3,7 @@ import Table from "components/table.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
-import {getPageResearches} from "api/api";
+import {getPageCompletedResearches} from "api/api";
 import {Link} from "react-router-dom";
 
 class ResearchActivePage extends React.Component {
@@ -23,7 +23,7 @@ class ResearchActivePage extends React.Component {
     }
 
     handlePageChange(pageNumber) {
-        getPageResearches(pageNumber.selected, this.state.size).then(res => res.data).then( data => (
+        getPageCompletedResearches(pageNumber.selected, this.state.size, false).then(res => res.data).then( data => (
             this.setState({
                 researches: data.content,
                 pageCount: data.totalPages,

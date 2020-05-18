@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.*;
 import ua.crops.repo.ParameterRepo;
 import ua.crops.repo.ResearchRepo;
+import ua.crops.repo.SortRepo;
 import ua.crops.service.ResearchService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +38,10 @@ public class ResearchRestController {
     @GetMapping("page")
     public Page<Research> page(@PageableDefault Pageable pageable) {
         return researchRepo.findAll(pageable);
+    }
+    @GetMapping("page/{isCompleted}")
+    public Page<Research> page(@PathVariable("isCompleted") boolean isCompleted, @PageableDefault Pageable pageable) {
+        return researchRepo.getAllByCompletedIs(pageable, isCompleted);
     }
 
     @GetMapping("{id}")
@@ -90,6 +94,12 @@ public class ResearchRestController {
         result.setParameter(parameterRepo.findById(id).get());
         result.setValue(Double.parseDouble(body.get("value")));
         research.getResults().add(result);
+        return researchRepo.save(research);
+    }
+
+    @PutMapping("complete/{id}")
+    public Research complete(@PathVariable("id")  Research research) {
+        research.setCompleted(true);
         return researchRepo.save(research);
     }
 }

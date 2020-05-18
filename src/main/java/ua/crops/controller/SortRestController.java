@@ -8,16 +8,20 @@ import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.Plant;
 import ua.crops.entity.Sort;
 import ua.crops.repo.SortRepo;
+import ua.crops.service.SortService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/sort")
 public class SortRestController {
-    private SortRepo sortRepo;
+    private final SortRepo sortRepo;
+    private final SortService sortService;
 
-    public SortRestController(SortRepo sortRepo) {
+    public SortRestController(SortRepo sortRepo, SortService sortService) {
         this.sortRepo = sortRepo;
+        this.sortService = sortService;
     }
 
     @GetMapping
@@ -35,6 +39,11 @@ public class SortRestController {
         return sortRepo.findAll(pageable);
     }
 
+    @GetMapping("completed")
+    public Set<Sort> getAllWhereIsCompletedResearch() {
+        return sortService.getAllByCompletedResearches();
+    }
+
     @GetMapping("{id}")
     public Sort getObjById(@PathVariable("id") Sort sort) {
         return sort;
@@ -45,7 +54,6 @@ public class SortRestController {
         sort.setPlant(plant);
         return sortRepo.save(sort);
     }
-
 
     @PutMapping("{id}")
     public Sort update(@PathVariable("id") Sort dbSort, @RequestBody Sort sort) {
