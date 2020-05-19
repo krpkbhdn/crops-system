@@ -10,3 +10,4 @@ export * from "pages/results-page.jsx";
 export * from "pages/research-new-page.jsx";
 export * from "pages/research-active-page.jsx";
 export * from "pages/research-completed-page.jsx";
+export * from "pages/research-completed-info-page.jsx";

@@ -22,9 +22,6 @@ public class Sort {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "plant_id")
     private Plant plant;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "sort_id")
-    private List<Register> register;
 
     public Sort() {
     }
@@ -64,13 +61,4 @@ public class Sort {
     public void setPlant(Plant plant) {
         this.plant = plant;
     }
-
-    public List<Register> getRegister() {
-        return register;
-    }
-
-    public void setRegister(List<Register> register) {
-        this.register = register;
-    }
-
 }

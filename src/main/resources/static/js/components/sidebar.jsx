@@ -1,26 +1,34 @@
 import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faBuilding, faCaretDown, faCog, faFlask, faSeedling} from '@fortawesome/free-solid-svg-icons';
+import {faBuilding, faCaretDown, faCog, faFlask, faSeedling, faArchive, faCube} from '@fortawesome/free-solid-svg-icons';
 import {Link} from "react-router-dom";
 
 const sidebarMenu = [
-    {title: '', sections: [
+    {
+        title: '', sections: [
             // {title: 'Статистика', icon: faChartBar, links: [
             //         {name: 'Дослідження', href: '#'},
             //         {name: 'Культури', href: '#'},
             //         {name: 'Працівники', href: '#'},
             //     ]
             // },
-            {title: 'Дослідження', icon: faFlask, links: [
+            {
+                title: 'Дослідження', icon: faFlask, links: [
                     {name: 'Розпочати нове', href: '/research/new'},
                     {name: 'Активні', href: '/research/active'},
                     {name: 'Завершені', href: '/research/completed'},
                 ]
             },
-            // {title: 'Реєстр', icon: faBoxes, links: [
-            //         {name: 'Сорти', href: '#'},
-            //     ]
-            // },
+            {
+                title: 'Реєстр', icon: faCube, links: [
+                    {name: 'Сорти', href: '#'},
+                ]
+            },
+            {
+                title: 'Архів', icon: faArchive, links: [
+                    {name: 'Сорти', href: '#'},
+                ]
+            },
             // {title: 'Заявки', icon: faThList, links: [
             //         {name: 'Нові', href: '#'},
             //         {name: 'Очікують', href: '#'},
@@ -28,17 +36,20 @@ const sidebarMenu = [
             //         {name: 'Відхиленні', href: '#'},
             //     ]
             // },
-            {title: 'Рослиництво', icon: faSeedling, links: [
+            {
+                title: 'Рослиництво', icon: faSeedling, links: [
                     {name: 'Культури', href: '/crop'},
                     {name: 'Рослини', href: '/plant'},
                     {name: 'Сорти', href: '/sort'},
                 ]
             },
-            {title: 'Організація', icon: faBuilding, links: [
+            {
+                title: 'Організація', icon: faBuilding, links: [
                     {name: 'Станції', href: '/station'},
                 ]
             },
-            {title: 'Загальні параметри', icon: faCog, links: [
+            {
+                title: 'Загальні параметри', icon: faCog, links: [
                     {name: 'Кліматичні зони', href: '/climate-zone'},
                     {name: 'Параметри', href: '/parameter'},
                     {name: 'Одиниці вимірювання', href: '/unit'},
@@ -62,14 +73,14 @@ const sidebarMenu = [
 
 class Sidebar extends React.Component {
     render() {
-        return(
+        return (
             <div id="sidebar">
                 <div className="sidebar-header">
                     <h1>Research<b><i>Helper</i></b></h1>
                 </div>
                 <div className="sidebar-body">
                     {sidebarMenu.map((item, index) => (
-                        <SidebarSection key={index} section={item} />
+                        <SidebarSection key={index} section={item}/>
                     ))}
                 </div>
 
@@ -81,8 +92,8 @@ class Sidebar extends React.Component {
 class SidebarSection extends React.Component {
 
     render() {
-        const { section } = this.props;
-        return(
+        const {section} = this.props;
+        return (
             <div className="sidebar-section">
                 {section.title !== undefined ? (
                     <div className="section-title">
@@ -107,7 +118,9 @@ class SidebarCollapse extends React.Component {
 
     componentDidMount() {
         this.setState({
-            componentHeight: this.listRef.current.clientHeight + (this.props.section.links.length * 4) + 'px'
+            componentHeight:
+                (this.listRef.current !== null ? this.listRef.current.clientHeight : 0)
+                + (this.props.section.links.length * 4) + 'px'
         })
     }
 
@@ -118,26 +131,36 @@ class SidebarCollapse extends React.Component {
     }
 
     render() {
-        const { isActive, componentHeight } = this.state;
-        const { section } = this.props;
-        return(
+        const {isActive, componentHeight} = this.state;
+        const {section} = this.props;
+        return (
             <div className="sidebar-collapse">
-                <div className="collapse-btn">
-                    <a onClick={() => this.handlerOnClickCollapse()}>
-                        {section.icon !== undefined ? <FontAwesomeIcon className="icon" icon={section.icon} /> : ''}
-                        {section.title}
-                        <FontAwesomeIcon className="icon-caret" icon={faCaretDown}
-                                         style={isActive ? {transform: "rotate(180deg)"} : ""}
-                        />
-                    </a>
-                </div>
-                <div className="collapse-container"
-                     style={isActive ? {height: componentHeight} : {height: "0"}}>
-                    <ul ref={this.listRef}>
-                        {section.links.map((item, index) => <li key={index}><Link to={item.href}>{item.name}</Link></li>)}
-                    </ul>
+                {section.links.length === 1 ?
+                    <div className="collapse-btn">
+                        <Link to={section.links[0].href}>
+                            {section.icon !== undefined ? <FontAwesomeIcon className="icon" icon={section.icon}/> : ''}
+                            {section.title}
+                        </Link>
+                    </div> :
+                    <div className="collapse-btn">
 
-                </div>
+                        <a onClick={() => this.handlerOnClickCollapse()}>
+                            {section.icon !== undefined ? <FontAwesomeIcon className="icon" icon={section.icon}/> : ''}
+                            {section.title}
+                            <FontAwesomeIcon className="icon-caret" icon={faCaretDown}
+                                             style={isActive ? {transform: "rotate(180deg)"} : ""}
+                            />
+                        </a>
+                    </div>}
+                {section.links.length === 1 ? null :
+                    <div className="collapse-container"
+                         style={isActive ? {height: componentHeight} : {height: "0"}}>
+                        <ul ref={this.listRef}>
+                            {section.links.map((item, index) => <li key={index}><Link to={item.href}>{item.name}</Link>
+                            </li>)}
+                        </ul>
+
+                    </div>}
             </div>
         )
     }

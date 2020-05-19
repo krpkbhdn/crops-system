@@ -13,6 +13,9 @@ public class Register {
     @Column(name = "register_name")
     private String name;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "sort_id")
+    private Sort sort;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "register_id")
     private List<ParameterValue> parametersValue;
@@ -30,6 +33,14 @@ public class Register {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Sort getSort() {
+        return sort;
+    }
+
+    public void setSort(Sort sort) {
+        this.sort = sort;
     }
 
     public List<ParameterValue> getParametersValue() {

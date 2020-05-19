@@ -95,7 +95,7 @@ public class ResearchService {
                 }
 
                 Map<String, Object> map = new HashMap<>();
-                map.put("climateZone", climateZone.getName());
+                map.put("climateZone", climateZone);
                 map.put("average", summaryAverage);
                 response.add(map);
             }

@@ -141,6 +141,20 @@ input::-webkit-inner-spin-button {
   color: $light;
 }
 
+.text-warning {
+  font-weight: 600;
+  color: $warning-active !important;
+}
+.text-success {
+  font-weight: 600;
+  color:  $success-active !important;
+}
+.text-danger {
+  font-weight: 600;
+  color: $danger-active !important;
+}
+
+
 .indicator-warning {
   background: $warning-active !important;
 }
@@ -351,6 +365,7 @@ input::-webkit-inner-spin-button {
     margin: .5rem 0 .3rem;
     cursor: pointer;
     user-select: none;
+    color: $light;
 
     &:hover {
       background: $dark-three;
@@ -646,33 +661,6 @@ input::-webkit-inner-spin-button {
     }
   }
 
-  .m-table {
-    color: $dark;
-    border: none;
-    border-collapse: collapse;
-    width: 100%;
-    text-align: left;
-    margin-bottom: 1rem;
-
-    thead {
-      border-bottom: 1px solid $dark-three;
-      tr {
-        th {
-          text-align: left;
-
-        }
-      }
-    }
-    tbody {
-      border-bottom: 1px solid $dark-three;
-      tr {
-        td {
-          padding: .3rem .3rem .3rem 0;
-        }
-      }
-    }
-  }
-
   .info-list {
     list-style: disc inside;
     margin-left: 2.1rem;
@@ -683,6 +671,33 @@ input::-webkit-inner-spin-button {
     min-height: 200px;
     max-width: 100%;
     min-width: 100%;
+  }
+}
+
+.modal-window .m-table, .card .card-table {
+  color: $dark;
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1rem;
+
+  thead {
+    border-bottom: 1px solid $dark-three;
+    tr {
+      th {
+        text-align: left;
+
+      }
+    }
+  }
+  tbody {
+    border-bottom: 1px solid $dark-three;
+    tr {
+      td {
+        padding: .3rem .3rem .3rem 0;
+      }
+    }
   }
 }
 
