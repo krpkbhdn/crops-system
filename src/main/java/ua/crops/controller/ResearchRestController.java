@@ -41,7 +41,7 @@ public class ResearchRestController {
 
     @GetMapping("page/{isCompleted}")
     public Page<Research> page(@PathVariable("isCompleted") boolean isCompleted, @PageableDefault Pageable pageable) {
-        return researchRepo.getAllByCompletedIs(pageable, isCompleted);
+        return researchRepo.getAllByCompletedIsAndArchiveIs(isCompleted, false, pageable);
     }
 
     @GetMapping("{id}")
@@ -100,6 +100,7 @@ public class ResearchRestController {
     @PutMapping("complete/{id}")
     public Research complete(@PathVariable("id")  Research research) {
         research.setCompleted(true);
+        research.setEndDate(LocalDateTime.now());
         return researchRepo.save(research);
     }
 }

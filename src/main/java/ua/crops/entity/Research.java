@@ -25,8 +25,11 @@ public class Research {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime endDate;
 
-    @Column(name = "research_is_completed")
+    @Column(name = "research_completed")
     private boolean completed;
+
+    @Column(name = "research_archive")
+    private boolean archive;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "station_id")
@@ -66,6 +69,14 @@ public class Research {
 
     public boolean isCompleted() {
         return completed;
+    }
+
+    public boolean isArchive() {
+        return archive;
+    }
+
+    public void setArchive(boolean archive) {
+        this.archive = archive;
     }
 
     public void setCompleted(boolean completed) {

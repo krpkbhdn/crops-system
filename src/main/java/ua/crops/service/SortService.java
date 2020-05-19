@@ -21,7 +21,7 @@ public class SortService {
     }
 
     public Set<Sort> getAllByCompletedResearches() {
-        List<Research> completedResearch = researchRepo.getAllByCompletedIs(true);
+        List<Research> completedResearch = researchRepo.getAllByCompletedIsAndArchiveIs(true, false);
         Set<Sort> sortsWhereIsCompletedResearch = new HashSet<>();
 
         for (Research research : completedResearch) {

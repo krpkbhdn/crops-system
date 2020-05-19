@@ -1,14 +1,17 @@
 import React from "react";
-import {getSortById, getSummaryOfSort, addRegisterRecord} from "api/api";
+import {getSortById, getSummaryOfSort, addRegisterRecord, transferToArchive} from "api/api";
 import ModalWindow from "components/modal.jsx";
 
 class ResearchCompletedInfoPage extends React.Component {
 
     constructor() {
         super();
+        this._modal = React.createRef();
         this.state = {
             sort: null,
+            name: "",
             summaryData: [],
+            isTransferToArchive: false
         }
     }
 
@@ -51,16 +54,49 @@ class ResearchCompletedInfoPage extends React.Component {
         }
     }
 
-    handlerClickAddToRegister() {
+    openModal(modeIsTransfer) {
+        this.setState({isTransferToArchive: modeIsTransfer});
+        this._modal.current.openModal();
+    }
 
-        addRegisterRecord(this.state.sort, "name12").then(res => console.log(res));
+    handlerClickAddToRegister() {
+        addRegisterRecord(this.state.sort, this.state.name).then(res => console.log(res));
+        this._modal.current.closeModal();
+    }
+
+    handlerClickTransferToArchive() {
+        transferToArchive(this.state.sort).then(res => console.log(res));
+        this._modal.current.closeModal();
+    }
+
+    handlerName(e) {
+        this.setState({
+            name: e.target.value
+        });
     }
 
     render() {
-        const {summaryData, sort} = this.state;
+        const {summaryData, sort, name, isTransferToArchive} = this.state;
         const parseData = this.parseSummaryData();
         return (
             <div>
+                <ModalWindow ref={this._modal}>
+                    <div className="m-title">
+                        { isTransferToArchive ? 'Відправити в архів?' : 'Добавити в реєстр?'}
+                    </div>
+                    { isTransferToArchive ? null :
+                    <div className="m-content">
+                        <input type="text" placeholder={"Назва"} value={name} onChange={e => this.handlerName(e)}/>
+                    </div> }
+                    <div className="m-control">
+                        <button className="m-btn danger" onClick={() => this._modal.current.closeModal()}>Відмінити</button>
+                        {
+                            isTransferToArchive ?
+                                <button className="m-btn success" onClick={() => this.handlerClickTransferToArchive()}>Відправити</button> :
+                                <button className="m-btn success" onClick={() => this.handlerClickAddToRegister()}>Добавити</button>
+                        }
+                    </div>
+                </ModalWindow>
                 <div className="page-section">
                     <div className="card">
                         <div className="card-title">
@@ -127,10 +163,12 @@ class ResearchCompletedInfoPage extends React.Component {
                             </div>
                         </div>
                         <div className="card-bottom" style={{display: "flex", justifyContent: "flex-end"}}>
-                            <button className="btn danger">
+                            <button className="btn danger" onClick={() => this.openModal(true)}>
                                 Не добавляти в реєстр
                             </button>
-                            <button className="btn success" onClick={() => this.handlerClickAddToRegister()}>Добавити в реєстр</button>
+                            <button className="btn success" onClick={() => this.openModal(false)}>
+                                Добавити в реєстр
+                            </button>
                         </div>
                     </div>
                 </div>

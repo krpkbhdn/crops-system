@@ -26,7 +26,13 @@ public class RegisterRestController {
     public Register add(@PathVariable("id") Sort sort, @RequestBody Map<String, String> request) {
         Register register = registerService.createRegister(sort);
         register.setName(request.get("name"));
-        return register;
+        registerService.transferToArchive(sort);
+        return registerRepo.save(register);
+    }
+
+    @PostMapping("archive/{id}")
+    public void transferToArchive(@PathVariable("id") Sort sort) {
+        registerService.transferToArchive(sort);
     }
 
 }

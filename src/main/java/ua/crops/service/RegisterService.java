@@ -1,7 +1,9 @@
 package ua.crops.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.crops.entity.*;
+import ua.crops.repo.ResearchRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +13,29 @@ import java.util.Map;
 public class RegisterService {
 
     private final ResearchService researchService;
+    private final ResearchRepo researchRepo;
 
-    public RegisterService(ResearchService researchService) {
+    @Autowired
+    public RegisterService(ResearchService researchService, ResearchRepo researchRepo) {
         this.researchService = researchService;
+        this.researchRepo = researchRepo;
     }
 
     public Register createRegister(Sort sort) {
         Register register = new Register();
         List<ParameterValue> parameterValues =
                 parseSummary(researchService.getSummaryOfSortResearches(sort));
-
         register.setSort(sort);
         register.setParametersValue(parameterValues);
-
-
         return register;
+    }
+
+    public void transferToArchive(Sort sort) {
+        List<Research> researches = researchRepo.getAllBySortAndCompletedIsAndArchiveIs(sort, true, false);
+        for (Research research : researches) {
+            research.setArchive(true);
+            researchRepo.save(research);
+        }
     }
 
     private List<ParameterValue> parseSummary(List<Map<String, Object>> summary) {

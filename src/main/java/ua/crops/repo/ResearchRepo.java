@@ -10,7 +10,8 @@ import ua.crops.entity.Sort;
 import java.util.List;
 
 public interface ResearchRepo extends JpaRepository<Research, Long> {
-    List<Research> getAllByCompletedIs(boolean isCompleted);
-    Page<Research> getAllByCompletedIs(Pageable pageable, boolean isCompleted);
-    List<Research> getAllBySortAndStationClimateZoneAndCompletedIs(Sort sort, ClimateZone climateZone, boolean isCompleted);
+    List<Research> getAllByCompletedIsAndArchiveIs(boolean isCompleted, boolean isArchive);
+    Page<Research> getAllByCompletedIsAndArchiveIs(boolean isCompleted, boolean isArchive, Pageable pageable);
+    List<Research> getAllBySortAndStationClimateZoneAndCompletedIsAndArchiveIs(Sort sort, ClimateZone climateZone, boolean isCompleted, boolean isArchive);
+    List<Research> getAllBySortAndCompletedIsAndArchiveIs(Sort sort, boolean isCompleted, boolean isArchive);
 }

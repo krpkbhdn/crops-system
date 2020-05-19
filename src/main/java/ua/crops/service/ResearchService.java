@@ -67,7 +67,7 @@ public class ResearchService {
             List<Map<String, Object>> summaryAverage = new ArrayList<>();
 
             List<Research> researches =
-                    researchRepo.getAllBySortAndStationClimateZoneAndCompletedIs(sort, climateZone, true);
+                    researchRepo.getAllBySortAndStationClimateZoneAndCompletedIsAndArchiveIs(sort, climateZone, true, false);
 
             if (researches.size() > 0) {
                 for (Research research : researches) {

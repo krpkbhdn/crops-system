@@ -6,4 +6,10 @@ async function addRegisterRecord(sort, name) {
     return data;
 }
 
-export {addRegisterRecord};
+async function transferToArchive(sort) {
+    let data = null;
+    await axios.post('/api/register/archive/' + sort.id).then(res => data = res.data);
+    return data;
+}
+
+export {addRegisterRecord, transferToArchive};
