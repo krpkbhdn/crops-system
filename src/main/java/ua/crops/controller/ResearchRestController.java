@@ -44,9 +44,9 @@ public class ResearchRestController {
         return researchRepo.getAllByCompletedIsAndArchiveIs(isCompleted, false, pageable);
     }
 
-    @GetMapping("page/archive")
-    public Page<Research> pageArchive(@PageableDefault Pageable pageable) {
-        return researchRepo.getAllByCompletedIsAndArchiveIs(true, true, pageable);
+    @GetMapping("archive/{sort_id}")
+    public List<Map<String, Object>> pageArchive(@PathVariable("sort_id") Sort sort) {
+        return researchService.getArchivedResearchesBySort(sort);
     }
 
     @GetMapping("{id}")

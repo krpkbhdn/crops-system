@@ -18,7 +18,8 @@ import {
     ResearchCompletedInfoPage,
     RegisterPage,
     RegisterInfoPage,
-    ArchivePage
+    ArchivePage,
+    ArchiveInfoPage
 } from "pages/pages";
 
 class App extends React.Component{
@@ -51,7 +52,8 @@ class App extends React.Component{
                                 <Route path="/research/completed/:id" component={ResearchCompletedInfoPage}/>
                                 <Route exact path="/register" component={RegisterPage}/>
                                 <Route path="/register/:id" component={RegisterInfoPage}/>
-                                <Route path="/archive" component={ArchivePage}/>
+                                <Route exact path="/archive" component={ArchivePage}/>
+                                <Route path="/archive/:id" component={ArchiveInfoPage}/>
                                 <Route path="**" component={MainPage}/>
                             </Switch>
                     </div>

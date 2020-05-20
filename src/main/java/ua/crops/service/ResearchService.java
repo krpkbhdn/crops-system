@@ -7,6 +7,8 @@ import ua.crops.repo.ClimateZoneRepo;
 import ua.crops.repo.ResearchRepo;
 import ua.crops.repo.ResultRepo;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +56,23 @@ public class ResearchService {
         }
 
         return response;
+    }
+
+    public List<Map<String, Object>> getArchivedResearchesBySort(Sort sort) {
+        List<Map<String, Object>> archivedResearches = new ArrayList<>();
+
+        List<Research> researches = researchRepo.getAllBySortAndCompletedIsAndArchiveIs(sort, true, true);
+
+        for (Research research : researches) {
+            Map<String, Object> map = new HashMap<>();
+            Duration duration = Duration.between(research.getStartDate(), research.getEndDate());
+            map.put("research", research);
+            map.put("duration", duration.toDays());
+            map.put("average", getAverageParametersByResearch(research));
+            archivedResearches.add(map);
+        }
+
+        return archivedResearches;
     }
 
     public List<Map<String, Object>> getSummaryOfSortResearches(Sort sort) {

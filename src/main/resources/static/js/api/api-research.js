@@ -12,9 +12,9 @@ async function getPageCompletedResearches(page, size, isCompleted) {
     return data;
 }
 
-async function getPageArchiveResearches(page, size) {
+async function getArchiveResearchesBySort(sortId) {
     let data = null;
-    await axios.get('/api/research/page/archive', { params: { page: page, size: size }}).then(res => data = res);
+    await axios.get('/api/research/archive/' + sortId).then(res => data = res);
     return data;
 }
 
@@ -70,7 +70,7 @@ async function completeResearch(id) {
 export {
     getPageResearches,
     getPageCompletedResearches,
-    getPageArchiveResearches,
+    getArchiveResearchesBySort,
     getResearchById,
     getResearchParameters,
     getAverageResults,

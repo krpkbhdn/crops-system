@@ -14,3 +14,4 @@ export * from "pages/research-completed-info-page.jsx";
 export * from "pages/register-page.jsx";
 export * from "pages/register-info-page.jsx";
 export * from "pages/archive-page.jsx";
+export * from "pages/archive-info-page.jsx";
