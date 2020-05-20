@@ -44,6 +44,11 @@ public class ResearchRestController {
         return researchRepo.getAllByCompletedIsAndArchiveIs(isCompleted, false, pageable);
     }
 
+    @GetMapping("page/archive")
+    public Page<Research> pageArchive(@PageableDefault Pageable pageable) {
+        return researchRepo.getAllByCompletedIsAndArchiveIs(true, true, pageable);
+    }
+
     @GetMapping("{id}")
     public Research getResearchById(@PathVariable("id") Research research) {
         return research;

@@ -47,7 +47,12 @@ public class SortRestController {
 
     @GetMapping("completed")
     public Set<Sort> getAllWhereIsCompletedResearch() {
-        return sortService.getAllByCompletedResearches();
+        return sortService.getAllByCompletedAndArchiveResearches(true, false);
+    }
+
+    @GetMapping("archive")
+    public Set<Sort> getAllWhereIsArchivedResearch() {
+        return sortService.getAllByCompletedAndArchiveResearches(true, true);
     }
 
     @GetMapping("summary/{id}")

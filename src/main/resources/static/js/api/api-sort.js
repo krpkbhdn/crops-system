@@ -24,6 +24,12 @@ async function getSortsWhereIsCompletedResearch() {
     return data;
 }
 
+async function getSortsWhereIsArchivedResearch() {
+    let data = null;
+    await axios.get('/api/sort/archive').then(res => data = res);
+    return data;
+}
+
 async function getSummaryOfSort(id) {
     let data = null;
     await axios.get('/api/sort/summary/' + id).then(res => data = res);
@@ -56,6 +62,7 @@ export {
     getAllSorts,
     getPageSorts,
     getSortsWhereIsCompletedResearch,
+    getSortsWhereIsArchivedResearch,
     getSummaryOfSort,
     getCountOfSorts,
     getSortById,

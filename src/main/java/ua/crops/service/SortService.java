@@ -20,8 +20,8 @@ public class SortService {
         this.researchRepo = researchRepo;
     }
 
-    public Set<Sort> getAllByCompletedResearches() {
-        List<Research> completedResearch = researchRepo.getAllByCompletedIsAndArchiveIs(true, false);
+    public Set<Sort> getAllByCompletedAndArchiveResearches(boolean isCompleted, boolean isArchive) {
+        List<Research> completedResearch = researchRepo.getAllByCompletedIsAndArchiveIs(isCompleted, isArchive);
         Set<Sort> sortsWhereIsCompletedResearch = new HashSet<>();
 
         for (Research research : completedResearch) {
