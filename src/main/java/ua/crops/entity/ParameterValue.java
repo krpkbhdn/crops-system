@@ -14,9 +14,6 @@ public class ParameterValue {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "parameter_id")
     private Parameter parameter;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "climate_zone_id")
-    private ClimateZone climateZone;
 
     public ParameterValue() {
     }
@@ -41,11 +38,4 @@ public class ParameterValue {
         this.parameter = parameter;
     }
 
-    public ClimateZone getClimateZone() {
-        return climateZone;
-    }
-
-    public void setClimateZone(ClimateZone climateZone) {
-        this.climateZone = climateZone;
-    }
 }

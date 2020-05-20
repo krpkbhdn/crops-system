@@ -235,7 +235,6 @@ class PlantPage extends React.Component {
                             previousLabel='&#10094;'
                             onPageChange={this.handlePageChange.bind(this)}
                         />
-
                         </div>
                     </Table>
                 </div>

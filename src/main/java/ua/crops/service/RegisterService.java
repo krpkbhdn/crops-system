@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import ua.crops.entity.*;
 import ua.crops.repo.ResearchRepo;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class RegisterService {
@@ -16,17 +14,19 @@ public class RegisterService {
     private final ResearchRepo researchRepo;
 
     @Autowired
-    public RegisterService(ResearchService researchService, ResearchRepo researchRepo) {
+    public RegisterService(
+            ResearchService researchService,
+            ResearchRepo researchRepo
+    ) {
         this.researchService = researchService;
         this.researchRepo = researchRepo;
     }
 
     public Register createRegister(Sort sort) {
         Register register = new Register();
-        List<ParameterValue> parameterValues =
-                parseSummary(researchService.getSummaryOfSortResearches(sort));
+        Set<RegisterOfClimateZone> registersOfClimateZones = parseSummary(researchService.getSummaryOfSortResearches(sort));
         register.setSort(sort);
-        register.setParametersValue(parameterValues);
+        register.setRegistersOfClimateZones(registersOfClimateZones);
         return register;
     }
 
@@ -38,20 +38,24 @@ public class RegisterService {
         }
     }
 
-    private List<ParameterValue> parseSummary(List<Map<String, Object>> summary) {
-        List<ParameterValue> parameterValues = new ArrayList<>();
+    private Set<RegisterOfClimateZone> parseSummary(List<Map<String, Object>> summary) {
+        Set<RegisterOfClimateZone> registersOfClimateZones = new HashSet<>();
 
         for (Map<String, Object> record : summary) {
+            RegisterOfClimateZone registerOfClimateZone = new RegisterOfClimateZone();
+            List<ParameterValue> parameterValues = new ArrayList<>();
             for(Map<String, Object> param : ((List<Map<String, Object>>) record.get("average"))) {
                 ParameterValue parameterValue = new ParameterValue();
-                parameterValue.setClimateZone((ClimateZone) record.get("climateZone"));
                 parameterValue.setParameter((Parameter) param.get("param"));
                 parameterValue.setValue((double) param.get("value"));
                 parameterValues.add(parameterValue);
             }
+            registerOfClimateZone.setClimateZone((ClimateZone) record.get("climateZone"));
+            registerOfClimateZone.setParametersValue(parameterValues);
+            registersOfClimateZones.add(registerOfClimateZone);
         }
 
-        return parameterValues;
+        return registersOfClimateZones;
     }
 
 }

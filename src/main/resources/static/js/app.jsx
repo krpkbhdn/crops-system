@@ -16,6 +16,9 @@ import {
     ResearchActivePage,
     ResearchCompletedPage,
     ResearchCompletedInfoPage,
+    RegisterPage,
+    RegisterInfoPage,
+    ArchivePage
 } from "pages/pages";
 
 class App extends React.Component{
@@ -46,20 +49,11 @@ class App extends React.Component{
                                 <Route path="/research/active/:id" component={ResultsPage}/>
                                 <Route exact path="/research/completed" component={ResearchCompletedPage}/>
                                 <Route path="/research/completed/:id" component={ResearchCompletedInfoPage}/>
+                                <Route exact path="/register" component={RegisterPage}/>
+                                <Route path="/register/:id" component={RegisterInfoPage}/>
+                                <Route path="/archive" component={ArchivePage}/>
+                                <Route path="**" component={MainPage}/>
                             </Switch>
-
-                        {/*<MainPage/>*/}
-                        {/*<StationPage/>*/}
-                        {/*<ClimateZonePage/>*/}
-                        {/*<SortPage/>*/}
-                        {/*<div className="page-section">*/}
-                        {/*    <PlantPage/>*/}
-                        {/*    <CropPage/>*/}
-                        {/*</div>*/}
-                        {/*<div className="page-section">*/}
-                        {/*    <ParameterPage/>*/}
-                        {/*    <UnitPage/>*/}
-                        {/*</div>*/}
                     </div>
                 </div>
                 </Router>

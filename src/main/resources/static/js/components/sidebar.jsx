@@ -21,12 +21,12 @@ const sidebarMenu = [
             },
             {
                 title: 'Реєстр', icon: faCube, links: [
-                    {name: 'Сорти', href: '#'},
+                    {name: 'Сорти', href: '/register'},
                 ]
             },
             {
                 title: 'Архів', icon: faArchive, links: [
-                    {name: 'Сорти', href: '#'},
+                    {name: 'Сорти', href: '/archive'},
                 ]
             },
             // {title: 'Заявки', icon: faThList, links: [

@@ -101,7 +101,6 @@ public class ResearchService {
             }
         }
 
-
         return response;
     }
 

@@ -11,3 +11,6 @@ export * from "pages/research-new-page.jsx";
 export * from "pages/research-active-page.jsx";
 export * from "pages/research-completed-page.jsx";
 export * from "pages/research-completed-info-page.jsx";
+export * from "pages/register-page.jsx";
+export * from "pages/register-info-page.jsx";
+export * from "pages/archive-page.jsx";

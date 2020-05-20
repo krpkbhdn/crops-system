@@ -2,6 +2,7 @@ package ua.crops.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "register")
@@ -18,7 +19,7 @@ public class Register {
     private Sort sort;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "register_id")
-    private List<ParameterValue> parametersValue;
+    private Set<RegisterOfClimateZone> registersOfClimateZones;
 
     public Register() {
     }
@@ -43,11 +44,11 @@ public class Register {
         this.sort = sort;
     }
 
-    public List<ParameterValue> getParametersValue() {
-        return parametersValue;
+    public Set<RegisterOfClimateZone> getRegistersOfClimateZones() {
+        return registersOfClimateZones;
     }
 
-    public void setParametersValue(List<ParameterValue> parametersValue) {
-        this.parametersValue = parametersValue;
+    public void setRegistersOfClimateZones(Set<RegisterOfClimateZone> registersOfClimateZones) {
+        this.registersOfClimateZones = registersOfClimateZones;
     }
 }
