@@ -19,7 +19,7 @@ import {
     RegisterPage,
     RegisterInfoPage,
     ArchivePage,
-    ArchiveInfoPage
+    ArchiveInfoPage, PlantEditorPage
 } from "pages/pages";
 
 class App extends React.Component{
@@ -39,7 +39,8 @@ class App extends React.Component{
                             <Switch>
                                 <Route exact path="/" component={MainPage}/>
                                 <Route path="/crop" component={CropPage}/>
-                                <Route path="/plant" component={PlantPage}/>
+                                <Route exact path="/plant" component={PlantPage}/>
+                                <Route exact path="/plant/:mode/:id?" component={PlantEditorPage}/>
                                 <Route path="/sort" component={SortPage}/>
                                 <Route path="/climate-zone" component={ClimateZonePage}/>
                                 <Route path="/station" component={StationPage}/>

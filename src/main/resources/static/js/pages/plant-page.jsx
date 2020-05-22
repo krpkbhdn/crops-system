@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {addPlant, deletePlant, getAllCrops, getAllParameters, getPagePlants, updatePlant} from 'api/api'
 import Select from "react-dropdown-select";
+import {Link} from "react-router-dom";
 
 class PlantPage extends React.Component {
     constructor() {

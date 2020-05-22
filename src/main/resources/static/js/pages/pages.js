@@ -1,5 +1,6 @@
 export * from "pages/main-page.jsx";
 export * from "pages/plant-page.jsx";
+export * from "pages/plant-editor-page.jsx";
 export * from "pages/crop-page.jsx";
 export * from "pages/sort-page.jsx";
 export * from "pages/unit-page.jsx";

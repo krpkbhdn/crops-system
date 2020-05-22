@@ -18,4 +18,10 @@ public class MainController {
         model.addAttribute("isDevMode", "dev".equals(profile));
         return "index";
     }
+
+    @GetMapping("admin")
+    public String admin(Model model) {
+        model.addAttribute("isDevMode", "dev".equals(profile));
+        return "admin";
+    }
 }

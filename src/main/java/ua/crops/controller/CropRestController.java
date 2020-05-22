@@ -8,23 +8,32 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import ua.crops.entity.Crop;
 import ua.crops.repo.CropRepo;
+import ua.crops.service.CropService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/crop")
 public class CropRestController {
 
     private final CropRepo cropRepo;
+    private final CropService cropService;
 
     @Autowired
-    public CropRestController(CropRepo cropRepo) {
+    public CropRestController(CropRepo cropRepo, CropService cropService) {
         this.cropRepo = cropRepo;
+        this.cropService = cropService;
     }
 
     @GetMapping
     public List<Crop> listAll() {
         return cropRepo.findAll();
+    }
+
+    @GetMapping("plants")
+    public List<Map<String, Object>> getCropsWithPlants() {
+        return cropService.getCropsWithPlants();
     }
 
     @GetMapping("count")
